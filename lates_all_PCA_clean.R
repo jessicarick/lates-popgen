@@ -7,7 +7,7 @@
 ###################
 
 ##################### 
-## 
+## Loading packages and data
 #####################
 ## Load required packages
 source("packages_funcs.R")
@@ -25,7 +25,9 @@ if (type == "gbs") {
   lates_vcfR <- read.vcfR("combined_lsta_noHets3-4_variants_0.5_maf0.01.recode.vcf")
 }
 
+#####################
 ## Cleaning up the data
+#####################
 
 # convert to genlight object and define ploidy
 latesgen <- vcfR2genlight(lates_vcfR)
@@ -186,12 +188,6 @@ if (type == "gbs") {
 }
 
 ## Now, plotting the PCA results
-colors<-rainbow(13,start=0, end=0.9,alpha = 0.6)
-colors2<-c("#8DD3C7","#BEBADA","#FB8072","#80B1D3",
-           "#B3DE69","#FCCDE5","#D9D9D9","#BC80BD","#CCEBC5","#FFED6F")
-colors.vir.lates <- viridis(7)
-colors.vir <- magma(13)
-shapes<-c(0,1,2,3)
 
 # colored by species
 par(oma=c(1,1,1,2), xpd=TRUE, mar=c(5.1, 4.1, 4.1, 1),mfrow=c(1,3))
@@ -251,48 +247,7 @@ p <- plot_ly(pcaAll, x = ~EV1, y = ~EV2, z = ~EV3, color = ~spp, colors = colors
 p
 
 #####################
-#####################
-## OMIT?!?!
-#####################
-#####################
-
-pcaAll$new_spp <- case_when(pcaAll$EV1 > 1 & pcaAll$EV2 > 0.1 ~ "Lmar",
-                            pcaAll$EV1 < 1 ~ "Lsta",
-                            pcaAll$EV1 > 1 & pcaAll$EV2 < -0.1 & pcaAll$EV3 > 0 ~ "Lmic",
-                            pcaAll$EV1 > 1 & pcaAll$EV3 < -0.25 ~ "Lang",
-                            TRUE ~ "UNK")
-pcaAll$new_spp <- as.factor(pcaAll$new_spp)
-
-table(pcaAll$new_spp)
-table(pcaAll$spp,pcaAll$new_spp)
-
-pairedinfolates$new_spp <- pcaAll$new_spp
-
-plot.new()
-par(mfrow=c(1,3),pin=c(2,2),mar=c(6,6,1,2))
-plot(pcaAll$EV1, pcaAll$EV2, pch=19, cex=2, lwd=1, col=scales::alpha(colors.vir.lates[pcaAll$new_spp],0.6),
-     xlab=paste("PC1 (", round(pcSummary$importance[2,1]*100, 1), "%)", sep=""),
-     ylab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""),
-     cex.lab=2)
-legend("topright",legend=levels(pcaAll$new_spp),col=scales::alpha(colors.vir.lates,0.6),border=NULL,pch=19,bty="n", cex=1, pt.cex=2, pt.lwd=2, horiz=FALSE)
-
-plot(pcaAll$EV2, pcaAll$EV3, pch=19, cex=2, lwd=1, col=scales::alpha(colors.vir.lates[pcaAll$new_spp],0.6),
-     xlab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""),
-     ylab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
-     cex.lab=2)
-plot(pcaAll$EV3, pcaAll$EV4, pch=19, cex=2, lwd=1, col=scales::alpha(colors.vir.lates[pcaAll$new_spp],0.6),
-     xlab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
-     ylab=paste("PC4 (", round(pcSummary$importance[2,4]*100, 1), "%)", sep=""),
-     cex.lab=2)
-
-#write.csv(pcaAll,"pcaAll.lates_may2020.csv",col.names=TRUE,row.names=FALSE,quote=FALSE)
-
-pop(latesgen_nolowcov) <- pairedinfolates$new_spp
-
-#####################
-#####################
-## also remove?
-#####################
+## Assign individuals to clusters
 #####################
 
 # clustering attempt using find.clusters / dapc
@@ -303,10 +258,10 @@ table.value(table(pairedinfolates$entropy_dnaID, grp$grp),
             row.lab=paste("grp", 1:4))
 
 dapc1 <- dapc(latesgen_nolowcov, grp$grp)
-scatter(dapc1)
+scatter(dapc1) # to visualize differences between groups
 
 #####################
-## Calculate Reich-Patterson fst between species
+## Calculate Reich-Patterson FST between species
 #####################
 
 pop(latesgen_nolowcov) <- pcaAll$spp
