@@ -5,6 +5,7 @@
 # - plot with the depth of the genotype against the count of the minor allele
 # - histogram of the proportion of the minor allele reads in the total reads
 # (c) David Marques, 02.12.0215
+# modified by Jessica Rick, June 2021
 
 # Get a random number
 r=$RANDOM
