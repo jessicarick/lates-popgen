@@ -7,6 +7,7 @@ library(abind)
 library(RColorBrewer)
 library(tidyverse)
 library(memisc)
+source("theme_custom.R")
 colors <- brewer.pal(3, "Set3")
 
 ## Accompanying metadata
@@ -16,7 +17,7 @@ results.dir <- "../data/admixture/" # directory with entropy results
 
 for (spp in spp_list) {
   #spp <- "lsta" # used for debugging
-  for (i in 2:6){
+  for (i in 2:8){
     k <- i  
     names <- read.table(paste0(results.dir,spp,".ind"), header=F, col.names="names")
     fishinfo <- left_join(names, details, by.x="names", by.y="names",
@@ -37,7 +38,7 @@ for (spp in spp_list) {
     print(mean(q.ci.width))
     print(median(q.ci.width))
   
-    ## Plot point estimates for q
+    ## Plot point estimates for q -- not super helpful at k > 2
     # pdf("q_hist_lsta_k2.pdf", width=6.5, height=9)
     # par(mfrow=c(2,2))
     # for(i in 1:length(unique(fishinfo$Field.ID))){
@@ -92,22 +93,28 @@ for (spp in spp_list) {
   # plotting stacked barplots
     plot <- ggplot(q.long[!is.na(q.long$site),], 
                  aes(fill=group, y=value, x=names)) + 
-      geom_bar(position="stack", stat="identity", width=1) +
-      facet_grid(~site, drop=TRUE, scales="free_x", shrink=TRUE, space="free",switch="x") +
-      #facet_grid(~assign,drop=TRUE,space="free",scales="free_x",shrink=TRUE, switch="x") +
-      #facet_grid(vars(site),drop=TRUE,space="free",scales="free_x",shrink=TRUE) +
-      theme(axis.title.x=element_blank(),
+    geom_bar(position="stack", stat="identity", width=1) +
+    facet_grid(~site, drop=TRUE, scales="free_x", shrink=TRUE, space="free",switch="x") +
+    #facet_grid(~assign,drop=TRUE,space="free",scales="free_x",shrink=TRUE, switch="x") +
+    #facet_grid(vars(site),drop=TRUE,space="free",scales="free_x",shrink=TRUE) +
+    theme_custom() +
+    theme(axis.title.x=element_blank(),
           axis.text.x=element_text(size=6,angle=90),
           axis.ticks.x=element_blank(),
           panel.background = element_blank(),
-          strip.text.x = element_text(angle=90,size=12),
+          strip.text.x = element_blank(),
           strip.text.y = element_text(size=18),
           legend.position="none",
           axis.text.y=element_text(size=12),
           axis.title.y=element_blank(),
           legend.text=element_text(size=16)) 
-    print(plot)
-  }
+  assign(paste0("plot.k",k),plot)
+  print(plot)
+}
+
+cowplot::plot_grid(plot.k2,plot.k3,
+                   plot.k4,plot.k5,plot.k6,
+                   plot.k7,plot.k8, ncol=1)
 }
 
 ##########################
@@ -194,6 +201,7 @@ plot <- ggplot(q.long[!is.na(q.long$site),],
   #facet_grid(~site, drop=TRUE, scales="free_x", shrink=TRUE, space="free",switch="x") +
   facet_grid(~spp,drop=TRUE,space="free",scales="free_x",shrink=TRUE, switch="x") +
   #facet_grid(vars(site),drop=TRUE,space="free",scales="free_x",shrink=TRUE) +
+  theme_custom() +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
