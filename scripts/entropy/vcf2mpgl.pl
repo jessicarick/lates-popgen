@@ -1,6 +1,7 @@
 #!/usr/bin/perl
-#
+
 # Time-stamp: <Tuesday, 04 December 2018, 07:56 EST -- mandeville>
+# Last modified June 2021, J. Rick
 
 # This is a copy of Alex's script for use with vcf-files having extra FORMAT fields and "./." uncalled
 # genotypes.
@@ -14,9 +15,10 @@
 # that gives the SNP id (scaffold, position) and the phred-scaled
 # genotype likelihoods, three per individual.
 
-#
 # USAGE: vcf2mpgl.pl in.vcf
 # Follow with cat header_mpglvariants_0.9.txt variants_0.9.mpgl > entropy_in_variants_0.9_all.mpgl
+# if you are getting errors, it may be because your individual IDs don't match the pattern expected!
+# check out notes near bottom of script
 
 use warnings;
 
@@ -115,7 +117,7 @@ close (OUT);
 open (INDS, "> indiv_ids.txt") or die "Could not write the id file\n";
 print INDS "ind,pop,taxon\n";
 foreach $word (@inds){
-    $word =~ m/([\w\d-]+)_([A-Za-z\d-]+)/;
+    $word =~ m/([\w\d-]+)_([A-Za-z\d-]+)/; ### again, depends on pattern of ind names
     print INDS "$word,$1,$2\n";
 }
 close (INDS);
