@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Time-stamp: <Tuesday, 04 December 2018, 07:56 EST -- mandeville>
+# Time-stamp: <Tuesday, 04 December 2018, 07:56 EST -- Liz Mandeville>
 # Last modified June 2021, J. Rick
 
 # This is a copy of Alex's script for use with vcf-files having extra FORMAT fields and "./." uncalled
