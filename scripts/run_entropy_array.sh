@@ -1,6 +1,5 @@
 #!/bin/sh
 
-#SBATCH --account=latesgenomics
 #SBATCH --time=7-00:00:00
 #SBATCH --ntasks-per-node=3
 #SBATCH --job-name=entropy-k%a
@@ -11,6 +10,10 @@ module load gcc
 module load gsl
 module load parallel
 $PATH=$PATH:/project/ltcichlidgenomics/bin/ # add path to find entropy, if necessary
+
+## script takes one or two arguments: mpgl file (required) and file with expected 
+## starting values for admixture proportions (-q in entropy, optional)
+## example usage: sbatch run_entropy_array.sh lates_all.entropy.mpgl
 
 if [ "$#" -ne 2]; then
     echo "two arguments passed to script; assuming these are (1) mpgl and (2) qfile"
