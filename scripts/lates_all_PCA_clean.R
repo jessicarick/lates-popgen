@@ -18,12 +18,8 @@ source("packages_funcs.R")
 
 ## Toggle for working with gbs vs rad data
 type <- "gbs"
+lates_vcfR <- read.vcfR("../data/lates_all_092320_0.5_maf0.01_thin90_dp10.recode.vcf")
 
-if (type == "gbs") {
-  lates_vcfR <- read.vcfR("lates_all_092320_0.5_maf0.01_thin90.recode.vcf")
-} else if (type == "rad") {
-  lates_vcfR <- read.vcfR("combined_lsta_noHets3-4_variants_0.5_maf0.01.recode.vcf")
-}
 
 #####################
 ## Cleaning up the data
@@ -31,8 +27,6 @@ if (type == "gbs") {
 
 # convert to genlight object and define ploidy
 latesgen <- vcfR2genlight(lates_vcfR)
-ploidy(latesgen) <- 2
-latesgen <- gl.compliance.check(latesgen)
 
 # clean up names and import associated metadata
 if (type == "gbs") {
@@ -41,7 +35,7 @@ if (type == "gbs") {
   col.names.clean[col.names.clean == "CEW16_135_2"] <- "CEW16_135"
   indNames(latesgen)<-col.names.clean
   
-  fishinfo <- read.csv('lates_combined_all_info_lib.csv',
+  fishinfo <- read.csv('../data/lates_combined_all_info_lib.csv',
                      header=TRUE,stringsAsFactors = FALSE)
   
   pairedinfolates <- left_join(data.frame(Moran_FishID=col.names.clean),
@@ -66,6 +60,8 @@ if (type == "gbs") {
 }
 
 # now, filter out any individuals with > 50% missing data
+ploidy(latesgen) <- 2
+latesgen <- gl.compliance.check(latesgen)
 latesgen.nolowcov <- gl.filter.callrate(latesgen,method="ind",
                                         threshold=0.5,mono.rm=TRUE,
                                         recalc=FALSE,plot=TRUE,v=2)
@@ -159,7 +155,6 @@ head(pairedinfolates) # make sure it paired okay
 
 
 ## Combining fish info with PC results 
-
 if (type == "gbs") {
   pcaAll <- data.frame(names = pairedinfolates$Moran_FishID,
                      spp = factor(pairedinfolates$entropy_dnaID),
@@ -273,3 +268,6 @@ lates_FST_spp <- reich.fst(latesgen_nolowcov,
 
 # for comparison
 lates_fst_spp_dartR <- gl.fst.pop(latesgen_nolowcov)
+
+# calculate general stats by species
+lates_heterozyg <- gl.report.heterozygosity(latesgen_nolowcov,method="pop")
