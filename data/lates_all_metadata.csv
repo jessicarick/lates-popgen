@@ -1,0 +1,231 @@
+﻿ind,sampling_year,sampling_loc,seq_library,SL_mm,TL_mm,mass_g,raw_reads,assem_reads,assem_pct,pheno_ID,pheno_sex,pca_ID_RAD,pca_ID_GBS,adm_ID,ngsadm_ID,ent_ID,agree?,checkHets,keep,comments,final_ID
+CEW16_023,2016,Kigoma,lates01,,,15.2,1442804,1346528,93.30%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in littoral gill net,Lmic
+CEW16_029,2016,Kigoma,lates01,,,,2160207,1986656,92.00%,Lang,,#N/A,#N/A,Lang,Lang,Lang,TRUE,2,Y,,Lang
+CEW16_034,2016,Kigoma,lates01,,,,1888963,1722084,91.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Bought from fisherman,Lsta
+CEW16_135,2016,Kigoma,lates01,,,14.9,1896877,1728720,91.10%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,1,Y,Bought from fisherman,Lsta
+CEW17_120,2017,Kigoma,lates01,87.7,98.7,737,330239,267467,81.00%,Lang,,#N/A,#N/A,Lang,Lang,Lang,TRUE,4,N,Bought from fisherman in Kigoma Bay,#N/A
+CEW17_123,2017,Kigoma,lates01,,,117,1744146,1557798,89.30%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,Bought from fisherman in Kigoma Bay,#N/A
+CEW17_126,2017,Kigoma,lates01,,,137,2127087,1915131,90.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,Bought from fisherman in Kigoma Bay,#N/A
+CEW17_150,2017,Kigoma,lates01,,,416,2019438,1831997,90.70%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Bought from fisherman in Kigoma Bay,Lsta
+CEW17_153,2017,Kigoma,lates01,,,134,1413586,1196744,84.70%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Bought from fisherman in Kigoma Bay,Lsta
+CEW17_155,2017,Kigoma,lates01,,,144,2566656,2342748,91.30%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Bought from fisherman in Kigoma Bay,Lsta
+CEW18_223,2018,Mpinbwe,lates03,,,,901590,848779,94.10%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW18_224,2018,Mpinbwe,lates03,,,,651512,612140,94.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW18_225,2018,Mpinbwe,lates03,,,,1175000,1115519,94.90%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW18_226,2018,Mpinbwe,lates03,,,,946971,892568,94.30%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW18_227,2018,Mpinbwe,lates03,,,,719459,675989,94.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW18_228,2018,Mpinbwe,lates03,,,,855767,806015,94.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW18_229,2018,Mpinbwe,lates03,,,,30238,28588,94.50%,Lsta,,#N/A,#N/A,Lsta,Lunk,Lsta,FALSE,4,N,,#N/A
+CEW18_230,2018,Mpinbwe,lates03,,,,1499917,1427788,95.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW18_231,2018,Mpinbwe,lates03,,,,854104,806557,94.40%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW18_232,2018,Mpinbwe,lates03,,,,1198942,1131770,94.40%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW18_234,2018,Mpinbwe,lates03,,,,1133111,1074305,94.80%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW19_132,2019,S_Mahale,lates03,,,,1033269,975760,94.40%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+CEW19_134,2019,S_Mahale,lates03,,,,746632,703234,94.20%,Lmic,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+CEW19_135,2019,S_Mahale,lates03,,,,1733211,1635449,94.40%,Lang,,#N/A,#N/A,Lang,Lang,Lang,TRUE,2,Y,,Lang
+FISHEC17_138942,2017,Ikola,lates03,,,,1012974,868054,85.70%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+FISHEC17_139054,2017,Kirando,lates03,,,,1420899,1332305,93.80%,Lang,,Lang,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+FISHEC17_139055,2017,Kirando,lates03,,,,1270673,1193694,93.90%,Lmic,,Lmic,Lmic,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+FISHEC17_139056,2017,Kirando,lates03,,,,32093,29786,92.80%,Lang,,Lang,#N/A,Lang,Lang,Lmar,FALSE,4,N,,#N/A
+FISHEC17_139057,2017,Kirando,lates03,,,,352769,329956,93.50%,Lang,,Lang,#N/A,Lang,Lang,Lang,TRUE,4,N,,#N/A
+FISHEC17_139058,2017,Kirando,lates03,,,,2227893,2090595,93.80%,Lmic,,Lmic,Lmic,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+FISHEC17_139129,2017,Kasanga,lates03,,,,1270780,1191486,93.80%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+FISHEC17_139255,2017,Kagunga,lates03,,,,830037,777416,93.70%,Lang,,Lang,Lang,Lang,Lang,Lang,TRUE,4,N,,#N/A
+FISHEC17_139256,2017,Kagunga,lates03,,,,1202846,1130139,94.00%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+FISHEC17_139257,2017,Kagunga,lates03,,,,1511884,1379778,91.30%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+FISHEC17_139258,2017,Kagunga,lates03,,,,1142110,1071065,93.80%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+FISHEC17_139259,2017,Kagunga,lates03,,,,852388,793208,93.10%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,3,N,,#N/A
+FISHEC17_139260,2017,Kagunga,lates03,,,,811142,619124,76.30%,#N/A,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,4,N,,#N/A
+FISHEC17_139261,2017,Kagunga,lates03,,,,649035,611572,94.20%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,3,N,,#N/A
+FISHEC17_139263,2017,Kagunga,lates03,,,,1204021,1125102,93.40%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+FISHEC17_139265,2017,Kagunga,lates03,,,,1070823,967410,90.30%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,4,N,,#N/A
+FISHEC17_139266,2017,Kagunga,lates03,,,,914637,837915,91.60%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,3,N,,#N/A
+FISHEC17_139267,2017,Kagunga,lates03,,,,1494860,1403840,93.90%,Lmar,,Lmar,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+FISHEC17_139268,2017,Kagunga,lates03,,,,1389299,1310558,94.30%,Lang,,Lang,#N/A,Lang,Lang,Lang,TRUE,2,Y,,Lang
+FISHEC17_139339,2017,Kigoma,lates03,,,,1097942,1030251,93.80%,Lang,,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+FISHEC17_139340,2017,Kigoma,lates03,,,,756556,707050,93.50%,Lmar,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,3,N,,#N/A
+FISHEC17_139342,2017,Kigoma,lates03,,,,787226,737830,93.70%,#N/A,,#N/A,Lmic,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+FISHEC17_139343,2017,Kigoma,lates03,,,,1119617,1047473,93.60%,Lang,,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139366,2018,Kigoma,lates03,,,,1413460,1327731,93.90%,Lang,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139367,2018,Kigoma,lates03,,,,1240765,1016910,82.00%,Lang,,#N/A,#N/A,Lang,Lang,Lang,TRUE,4,N,,#N/A
+JAR18_139368,2018,Kigoma,lates03,,,,1347162,1254336,93.10%,Lang,,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139371,2018,Kigoma,lates03,,,,722550,422093,58.40%,Lang,,#N/A,#N/A,Lang,Lang,Lang,TRUE,4,N,,#N/A
+JAR18_139372,2018,Kigoma,lates03,,,,1142540,987541,86.40%,Lang,,#N/A,Lmar (but is close to Lang),Lunk,Lunk,Lunk,TRUE,3,N,,#N/A
+JAR18_139373,2018,Kigoma,lates03,,,,1315434,598999,45.50%,Lang,,#N/A,Lang (plot is a bit outside of the cluster),Lang,Lang,Lang,TRUE,4,N,,#N/A
+JAR18_139374,2018,Kigoma,lates03,,,,613029,379054,61.80%,Lmar,M,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,4,N,,#N/A
+JAR18_139384,2018,Kigoma,lates03,,,,1360241,1257021,92.40%,Lmic,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+JAR18_139387,2018,Kagunga,lates03,205,240,88,778913,611801,78.50%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139388,2018,Kagunga,lates03,226,264,117,1339618,1236048,92.30%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139390,2018,Kagunga,lates03,162,221,77,899623,590671,65.70%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139392,2018,Kagunga,lates03,216,251,109,1511870,839100,55.50%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139394,2018,Kagunga,lates03,189,233,86,1296185,1073928,82.90%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139395,2018,Kagunga,lates03,295,336,262,707505,656878,92.80%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139396,2018,Kagunga,lates03,248,285,173,1626690,1525319,93.80%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139397,2018,Kagunga,lates03,254,302,182,780295,709782,91.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139398,2018,Kagunga,lates03,209,250,104,785334,323690,41.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139399,2018,Kagunga,lates03,271,310,192,827268,769501,93.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139400,2018,Kagunga,lates03,278,311,209,1765277,1642482,93.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139402,2018,Kagunga,lates03,181,216,75,1003581,874691,87.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139403,2018,Kagunga,lates03,210,243,97,777788,619484,79.60%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139404,2018,Kagunga,lates03,228,265,130,1002173,638749,63.70%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139405,2018,Kagunga,lates03,213,246,103,365983,215784,59.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139406,2018,Kagunga,lates03,252,288,144,811642,744982,91.80%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139407,2018,Kagunga,lates03,223,255,125,709611,658660,92.80%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139408,2018,Kagunga,lates03,164,221,81,1271301,1105637,87.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139409,2018,Kagunga,lates03,273,314,180,1186254,1095668,92.40%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139410,2018,Kagunga,lates03,203,233,75,977803,862608,88.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139411,2018,Kagunga,lates03,104,228,72,507042,400413,79.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139412,2018,Kagunga,lates03,206,233,88,974133,856543,87.90%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139413,2018,Kagunga,lates03,182,209,62,838785,721701,86.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139527,2018,Kigoma,lates03,316,369,424,1232781,1161136,94.20%,Lmar,M,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139528,2018,Kigoma,lates03,111,132,15,900307,780797,86.70%,Juv,,#N/A,Lmic,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+JAR18_139852,2018,Kirando,lates03,220,256,103,924473,863850,93.40%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139853,2018,Kirando,lates03,195,226,73,1097009,956287,87.20%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139858,2018,Kirando,lates03,191,225,88,1400400,1305162,93.20%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139859,2018,Kirando,lates03,204,239,81,633147,576307,91.00%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139862,2018,Kirando,lates03,198,230,75,1266206,1145897,90.50%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139867,2018,Kirando,lates03,192,223,77,438729,410354,93.50%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139891,2018,Kirando,lates03,n/a,n/a,n/a,1643525,1545493,94.00%,Lmar,F,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139895,2018,Kirando,lates03,600,695,2900,1217405,1134479,93.20%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139897,2018,Kirando,lates03,391,482,1023,1177054,1096512,93.20%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139899,2018,Kirando,lates03,428,502,1370,1442052,1339796,92.90%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139900,2018,Kirando,lates03,325,365,679,1581481,1447506,91.50%,Lang,F,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139901,2018,Kirando,lates03,209,247,139,55496,52458,94.50%,Lmar,,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,3,N,very little data,#N/A
+JAR18_139902,2018,Kirando,lates03,448,502,1365,1584765,1472993,92.90%,Lang,F,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139903,2018,Kirando,lates03,605,704,4000,1412423,1317044,93.20%,Lang,M,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139906,2018,Kirando,lates03,220,260,164,862363,376734,43.70%,Lmar,,#N/A,Lmar (but is close to Lang),Lunk,Lunk,Lunk,TRUE,4,N,,#N/A
+JAR18_139907,2018,Kirando,lates03,256,292,211,768642,624870,81.30%,Lmar,,#N/A,Lmar (but is close to Lang),Lunk,Lunk,Lunk,TRUE,4,N,,#N/A
+JAR18_139914,2018,Kirando,lates03,594,748,2900,1539679,1429927,92.90%,Lmic,,#N/A,Lmic,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+JAR18_139921,2018,Kirando,lates03,590,670,3200,177180,113500,64.10%,Lmar,F,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,3,N,very little data,#N/A
+JAR18_139922,2018,Wampembe,lates03,600,700,4450,1140184,1029655,90.30%,Lang,M,#N/A,#N/A,Lmic,Lmic,Lmic,FALSE,3,N,,#N/A
+JAR18_139923,2018,Wampembe,lates03,501,509,2000,1397254,1295919,92.70%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139924,2018,Wampembe,lates03,405,501,1000,832266,641991,77.10%,Lang,F,#N/A,Lang,Lang,Lang,Lang,TRUE,4,N,,#N/A
+JAR18_139925,2018,Wampembe,lates03,409,505,2000,1047760,963669,92.00%,Lang,F,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139926,2018,Wampembe,lates03,409,500,1300,1143684,1065980,93.20%,Lang,F,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139927,2018,Wampembe,lates03,500,508,1200,985084,863485,87.70%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,4,N,,#N/A
+JAR18_139928,2018,Wampembe,lates03,401,407,1000,1149964,1065694,92.70%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,3,N,,#N/A
+JAR18_139929,2018,Wampembe,lates03,440,447,737,1208711,1140988,94.40%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139930,2018,Wampembe,lates03,215,250,148,869535,815559,93.80%,Lang,F,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139931,2018,Wampembe,lates03,218,250,148,821028,770369,93.80%,Lang,M,#N/A,Lang,Lang,Lang,Lang,TRUE,2,Y,,Lang
+JAR18_139932,2018,Wampembe,lates03,140,160,39,1024820,949251,92.60%,Juv,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139933,2018,Wampembe,lates03,170,200,70,949494,891798,93.90%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139934,2018,Wampembe,lates03,153,179,97,1324956,1248567,94.20%,Lang,M,#N/A,Lmar (in the middle of the pulk),Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139935,2018,Wampembe,lates03,102,123,11,1174003,1104630,94.10%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139936,2018,Wampembe,lates03,140,161,37,1023064,960753,93.90%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139937,2018,Wampembe,lates03,165,191,73,1019373,957376,93.90%,Lmar,F,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139938,2018,Wampembe,lates03,79,90,3,743001,699754,94.20%,Lmar,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139939,2018,Wampembe,lates03,132,150,22,860395,806865,93.80%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139940,2018,Wampembe,lates03,113,133,24,1206439,1136139,94.20%,Lmar,F,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139941,2018,Wampembe,lates03,170,191,64,962739,895814,93.00%,Lmar,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139942,2018,Wampembe,lates03,109,123,24,1099793,1023034,93.00%,Lmar,,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139943,2018,Wampembe,lates03,75,90,30,1213654,1140128,93.90%,Lmar,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139944,2018,Wampembe,lates03,90,105,4,935375,858044,91.70%,Lmar,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139945,2018,Wampembe,lates03,73,85,2,1038424,974021,93.80%,Lmar,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139946,2018,Wampembe,lates03,62,70,2,800444,753585,94.10%,Lmar,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139947,2018,Wampembe,lates03,70,82,4,776194,727532,93.70%,Lmar,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139948,2018,Wampembe,lates03,75,90,4,1103464,1030266,93.40%,Lmar,,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_139983,2018,Wampembe,lates03,269,305,159,881976,815013,92.40%,Lsta,M,#N/A,Lunk,Lsta,Lsta,Lsta,TRUE,2,N,,#N/A
+JAR18_139984,2018,Wampembe,lates03,285,335,219,695059,648986,93.40%,Lsta,F,#N/A,#N/A,Lunk,Lunk,Lunk,TRUE,3,N,,#N/A
+JAR18_139985,2018,Wampembe,lates03,243,277,142,1264294,1158764,91.70%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139986,2018,Wampembe,lates03,239,266,124,719039,643902,89.60%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139987,2018,Wampembe,lates03,246,282,143,998546,880654,88.20%,Lsta,F,#N/A,#N/A,Lunk,Lsta,Lsta,FALSE,4,N,,#N/A
+JAR18_139988,2018,Wampembe,lates03,234,265,116,532643,466148,87.50%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139989,2018,Wampembe,lates03,244,282,112,674109,601647,89.30%,Lsta,F,#N/A,#N/A,Lunk,Lsta,Lsta,FALSE,3,N,,#N/A
+JAR18_139990,2018,Wampembe,lates03,244,282,139,1041043,987558,94.90%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139991,2018,Wampembe,lates03,259,292,152,862359,801475,92.90%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139992,2018,Wampembe,lates03,297,332,225,1103158,1015355,92.00%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_139993,2018,Wampembe,lates03,250,282,156,1195302,1125068,94.10%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_139995,2018,Wampembe,lates03,261,300,173,973976,814098,83.60%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139996,2018,Wampembe,lates03,280,300,147,510387,441028,86.40%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139997,2018,Wampembe,lates03,233,170,130,673137,615142,91.40%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139998,2018,Wampembe,lates03,239,275,224,953232,894178,93.80%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_139999,2018,Wampembe,lates03,236,273,114,907345,827499,91.20%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_140000,2018,Wampembe,lates03,237,273,234,924191,859973,93.10%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_140001,2018,Wampembe,lates03,266,303,255,698675,654080,93.60%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_140002,2018,Wampembe,lates03,245,276,229,788055,733474,93.10%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_140014,2018,Kasanga,lates03,606,706,5000,1420656,1322016,93.10%,Lmar,M,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_140015,2018,Kasanga,lates03,701,708,5000,1351255,1272257,94.20%,Lmic,F,#N/A,Lmic (but far away in the plot),Lmic,Lmic,Lmic,TRUE,3,N,,#N/A
+JAR18_140016,2018,Kasanga,lates03,509,700,4300,796237,743302,93.40%,Lmic,M,#N/A,Lmic (but far away in the plot),Lmar,Lmar,Lmar,FALSE,3,N,,#N/A
+JAR18_140017,2018,Kasanga,lates03,504,601,3000,1397572,1305800,93.40%,Lang,F,#N/A,Lmar (but is close to Lang),Lunk,Lunk,Lunk,TRUE,2,N,,#N/A
+JAR18_140018,2018,Kasanga,lates03,509,608,4500,1472081,1379371,93.70%,Lmar,M,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_140019,2018,Kasanga,lates03,604,704,4500,893482,830118,92.90%,Lang,F,#N/A,Lmar (but is close to Lang),Lunk,Lunk,Lunk,TRUE,2,N,,#N/A
+JAR18_140020,2018,Kasanga,lates03,408,506,1000,792962,575297,72.60%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,3,N,,#N/A
+JAR18_140021,2018,Kasanga,lates03,404,501,1500,1189245,1121653,94.30%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+JAR18_140022,2018,Kasanga,lates03,406,502,1500,1785331,1656517,92.80%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,3,N,,#N/A
+JAR18_140023,2018,Kasanga,lates03,407,504,1000,877054,821568,93.70%,Lmar,F,#N/A,Lmar,Lmar,Lmar,Lmar,TRUE,3,N,,#N/A
+JAR18_140024,2018,Kasanga,lates03,226,236,81,771177,723284,93.80%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_140025,2018,Kasanga,lates03,222,254,108,812010,763078,94.00%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_140026,2018,Kasanga,lates03,213,249,102,932204,880137,94.40%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_140027,2018,Kasanga,lates03,230,270,116,1081230,1014959,93.90%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_140028,2018,Kasanga,lates03,234,271,126,730976,683450,93.50%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_140029,2018,Kasanga,lates03,218,243,97,878140,827002,94.20%,Lsta,M,#N/A,#N/A,Lunk,Lsta,Lsta,FALSE,3,N,,#N/A
+JAR18_140030,2018,Kasanga,lates03,191,228,76,852349,801808,94.10%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_140031,2018,Kasanga,lates03,204,236,84,887143,839641,94.60%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_140033,2018,Kasanga,lates03,196,231,75,1468180,1388646,94.60%,Lsta,M,#N/A,#N/A,Lunk,Lunk,Lunk,TRUE,4,N,,#N/A
+JAR18_140034,2018,Kasanga,lates03,232,267,116,459343,434424,94.60%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_140035,2018,Kasanga,lates03,222,256,106,1364239,1288791,94.50%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_140036,2018,Kasanga,lates03,222,256,102,1010313,951721,94.20%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_140037,2018,Kasanga,lates03,223,261,103,862679,810275,93.90%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_140038,2018,Kasanga,lates03,213,252,96,929669,879694,94.60%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_140039,2018,Kasanga,lates03,216,249,98,1337174,1262511,94.40%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_140041,2018,Kasanga,lates03,239,270,129,1521675,1441065,94.70%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_140042,2018,Kasanga,lates03,205,234,89,674740,636527,94.30%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+JAR18_140043,2018,Kasanga,lates03,206,231,78,875530,824508,94.20%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_140044,2018,Kasanga,lates03,206,228,95,1030833,972198,94.30%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_140045,2018,Kasanga,lates03,211,243,99,930989,878130,94.30%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+JAR18_140046,2018,Kasanga,lates03,228,261,106,1076935,1021866,94.90%,Lsta,M,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,3,N,,#N/A
+JAR18_140047,2018,Kasanga,lates03,230,253,96,1313418,1245311,94.80%,Lsta,F,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+PBM2010_59,2010,Kigoma,lates01,89.8,104.2,8.63,1624146,1489868,91.70%,Lmic,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2010_60,2010,Kigoma,lates01,111.8,130.9,19.12,1546790,1425932,92.20%,Lmic,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_132,2011,Kigoma,lates01,103,127,17.56,1867334,1727814,92.50%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_133,2011,Kigoma,lates01,101,121,15.66,1235413,1135921,91.90%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_134,2011,Kigoma,lates01,95,115,12.92,1518808,1384719,91.20%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_135,2011,Kigoma,lates01,138,163,39.34,1373950,1245487,90.70%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_136,2011,Kigoma,lates01,119,147,27.01,1936352,1769196,91.40%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_137,2011,Kigoma,lates01,139,168,40.03,1286368,1106960,86.10%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_138,2011,Kigoma,lates01,102,123,16.92,1203130,1035085,86.00%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_139,2011,Kigoma,lates01,141,167,38.04,2119271,1850050,87.30%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_294,2011,Kigoma,lates01,96,115,13.93,1798308,1585163,88.10%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_299,2011,Kigoma,lates01,98,121,15.52,832564,759535,91.20%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBM2011_323,2011,Kigoma,lates01,214,257,171.64,3583751,3355177,93.60%,Lang,,#N/A,#N/A,Lang,Lang,Lang,TRUE,1,Y,,Lang
+PBM2011_354,2011,Kigoma,lates01,520,630,2100,3294520,3030604,92.00%,Lmar,,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,2,Y,Caught deep by fisherman,Lmar
+PBM2012_114,2012,N_Mahale,lates01,112,137,23.68,3096369,2810363,90.80%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in littoral gill net,Lmic
+PBM2012_117,2012,N_Mahale,lates01,96,119,16.74,3013680,2790588,92.60%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in littoral gill net,Lmic
+PBM2012_128,2012,N_Mahale,lates01,90,110,15.63,2675242,2425583,90.70%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in littoral gill net,Lmic
+PBM2012_135,2012,N_Mahale,lates01,130,158,36.59,2761383,2557659,92.60%,Lmar,,#N/A,#N/A,Lmic,Lmic,Lmic,FALSE,1,Y,,Lmic
+PBM2012_251,2012,N_Mahale,lates01,600,700,3650,2731287,2514426,92.10%,Lmar,,#N/A,#N/A,Lang,Lang,Lang,TRUE,2,Y,Caught in TAFIRI gill net,Lang
+PBM2015_1189,2015,S_Mahale,lates01,,,6000,2113323,1938948,91.70%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in littoral gill net,Lmic
+PBM2015_1194,2015,S_Mahale,lates01,,,,2696536,2425826,90.00%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in littoral gill net,Lmic
+PBM2015_1195,2015,S_Mahale,lates01,590,720,3400,2319580,2125469,91.60%,Lmic,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in gill net during night dive,Lmic
+PBM2015_1196,2015,S_Mahale,lates01,n/a,n/a,n/a,2129127,1929987,90.60%,Juv,,#N/A,#N/A,Lang,Lang,Lang,TRUE,2,Y,Caught in gill net during night dive,Lang
+PBM2015_1212,2015,S_Mahale,lates01,,,,1878908,1734800,92.30%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Caught in littoral gill net,Lsta
+PBM2015_1215,2015,S_Mahale,lates01,,,,1838144,1712324,93.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Caught in littoral gill net,Lsta
+PBM2015_1352,2015,S_Mahale,lates01,,,,2228806,2044828,91.70%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Caught in littoral gill net,Lsta
+PBM2015_1354,2015,S_Mahale,lates01,,,,1876637,1735436,92.50%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Caught in littoral gill net,Lsta
+PBM2015_1355,2015,S_Mahale,lates01,,,,1575080,1463542,92.90%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Caught in littoral gill net,Lsta
+PBM2015_1465,2015,S_Mahale,lates01,142,173,,784173,715478,91.20%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,4,N,Caught in littoral gill net,#N/A
+PBM2015_1466,2015,S_Mahale,lates01,156,194,,3974914,3691420,92.90%,Juv,,#N/A,#N/A,Lunk,Lunk,Lunk,TRUE,2,N,Caught in littoral gill net,#N/A
+PBM2015_1467,2015,S_Mahale,lates01,177,222,,227322,210359,92.50%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,3,N,Caught in littoral gill net,#N/A
+PBM2015_1665,2015,N_Mahale,lates01,,,,2362208,2187786,92.60%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in littoral gill net,Lmic
+PBM2015_1666,2015,N_Mahale,lates01,,,,2024041,1849963,91.40%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in littoral gill net,Lmic
+PBM2015_1951,2015,N_Mahale,lates01,,,,1223270,973060,79.50%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Caught in littoral gill net,Lsta
+PBM2015_1952,2015,N_Mahale,lates01,,,,1137557,967447,85.00%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Caught in littoral gill net,Lsta
+PBM2015_1955,2015,N_Mahale,lates01,,,,1549124,1306721,84.40%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Bought from fisherman at Buhingu market,Lsta
+PBM2015_1987,2015,Kigoma,lates01,,,,1579863,1454551,92.10%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+PBM2015_1989,2015,Kigoma,lates01,,,,1143315,1018889,89.10%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+PBM2015_1991,2015,Kigoma,lates01,,,,2232948,2035693,91.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+PBM2015_1992,2015,Kigoma,lates01,,,,1750719,1624077,92.80%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+PBM2015_1995,2015,Kigoma,lates01,,,,1753218,1619724,92.40%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,4,N,,#N/A
+PBM2015_1997,2015,Kigoma,lates01,,,,2253425,2055174,91.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+PBM2015_2002,2015,Kigoma,lates01,,,,2464446,2196822,89.10%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,,Lsta
+PBM2015_2003,2015,Kigoma,lates01,142,179,,3034558,2830641,93.30%,Lang,,#N/A,#N/A,Lang,Lang,Lang,TRUE,2,Y,,Lang
+PBMC114,2002,Kigoma,lates01,,,,3791169,3545369,93.50%,Lmar,,#N/A,#N/A,Lang,Lang,Lang,FALSE,1,Y,,Lang
+PBMC115,2002,Kigoma,lates01,,,,3273480,3062676,93.60%,Lmar,,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,1,Y,,Lmar
+PBMC116,2002,Kigoma,lates01,,,,2730561,2516766,92.20%,Juv,,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+PBMC119,2002,Kigoma,lates01,,,,3184559,2985628,93.80%,Juv,,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+PBMC120,2002,Kigoma,lates01,,,,2625322,2454294,93.50%,Juv,,#N/A,#N/A,Lmar,Lmar,Lmar,TRUE,2,Y,,Lmar
+PBMC197,2002,Kigoma,lates01,,,,2361245,2198815,93.10%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBMC84,2001,Kigoma,lates01,,,,2526589,2349586,93.00%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBMC85,2001,Kigoma,lates01,,,,2737896,2558781,93.50%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBMC86,2001,Kigoma,lates01,,,,2647080,2478357,93.60%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
+PBMC87,2001,Kigoma,lates01,,,,2484930,2320556,93.40%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,,Lmic
