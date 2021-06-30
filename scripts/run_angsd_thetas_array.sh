@@ -3,17 +3,17 @@
 ## script for running angsd
 
 #SBATCH --account=latesgenomics
-#SBATCH --time=3-00:00:00
+#SBATCH --time=3-00:00:00 		# shouldn't take more than a day, but gets slow with lots of individuals
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=16
-#SBATCH --mem=124G
-#SBATCH --array=0-4 # should be one array per bamlist
+#SBATCH --mem=124G 				# might not be necessary, depending on size of data
+#SBATCH --array=0-4 			# should be one array per bamlist
 
 module load gcc
-module load gsl
-module load htslib
-module load bzip2
-module load samtools
+module load gsl/2.5
+module load htslib/1.12
+module load bzip2/1.0.8
+module load samtools/1.12
 
 angsd_dir="/home/jrick/bin/angsd" 	# path to where angsd is installed
 basedir="./" 						# directory where input files are, and where results will be written
