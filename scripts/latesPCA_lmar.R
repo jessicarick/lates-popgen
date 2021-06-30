@@ -280,7 +280,8 @@ ggarrange(lmar2,lmar3,nrow=1)
 ## plot fst values as heatmap
 as.data.frame(Dgen_lmar$fsts) %>% 
         rownames_to_column(var="pop2") %>% as_tibble() %>%
-        gather(key="pop1", value="fst", -1) %>% ggplot(aes(pop1, pop2, fill= fst)) + 
+        gather(key="pop1", value="fst", -1) %>% 
+        ggplot(aes(pop1, pop2, fill= fst)) + 
         geom_tile() + 
         theme(legend.position="none") + theme_void() +
         geom_text(aes(label = round(fst, 3))) + 

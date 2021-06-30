@@ -259,21 +259,12 @@ lates_FST_all_tmp <- rbind(lates_FST_all,lates_FST_spp$bootstraps)
 lates_FST_all <- lates_FST_all_tmp
 
 lates_FST_all$fst_estimate <- as.numeric(lates_FST_all$fst_estimate)
-lates_FST_all$pop1 <- factor(lates_FST_all$pop1,
-                             levels=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                                      "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
-                                      "Kasanga","Cameroon","Congo","Dar"))
-lates_FST_all$pop2 <- factor(lates_FST_all$pop2,
-                             levels=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                                      "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
-                                      "Kasanga","Cameroon","Congo","Dar"))
 
 lates_FST_all2 <- lates_FST_all[,c(2,1,3:5,106)]
 colnames(lates_FST_all2) <- c("pop1","pop2","fst_estimate","min_CI","max_CI","spp")
 
 lates_FST_all3 <- rbind(lates_FST_all[,c(1:5,106)],lates_FST_all2)
 lates_FST_all3$fst_estimate[lates_FST_all3$fst_estimate < 0] <- 0
-lates_FST_all3$spp <- factor(lates_FST_all3$spp,levels=c("Lsta","Lmic","Lmar","Lang"))
 
 ################################
 ## write file with fst estimates
@@ -284,6 +275,47 @@ write.csv(lates_FST_all3,file="../data/lates_fst_by_sampling_site.csv",row.names
 ## plot heatmap of fst values by species
 ################################
 lates_FST_all3 %>%
+  add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
+          spp=rep("Lsta",10)) %>%
+  add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
+          spp=rep("Lmic",10)) %>%
+  add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
+          spp=rep("Lmar",10)) %>%
+  add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
+          spp=rep("Lang",10)) %>%
+  mutate(pop1 = factor(pop1,
+                       levels=rev(c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                                "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                                "Kasanga","Cameroon","Congo","Dar"))),
+         pop2 = factor(pop2,
+                       levels=rev(c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                                "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                                "Kasanga","Cameroon","Congo","Dar"))),
+         spp = factor(spp,levels=c("Lsta","Lmic","Lmar","Lang"))) %>%
   group_by(spp) %>%
   filter(as.integer(pop1) <= as.integer(pop2)) %>%
 ggplot(aes(x=pop1,y=pop2,fill=fst_estimate)) +
@@ -292,7 +324,7 @@ ggplot(aes(x=pop1,y=pop2,fill=fst_estimate)) +
   facet_wrap(~spp,nrow=1,drop=FALSE,strip.position="bottom") +
   theme_custom() +
   theme(axis.text.x = element_text(angle=45,hjust=1),
-        strip.text = element_blank(),
+        #strip.text = element_blank(),
         panel.spacing = unit(3.5, "lines"),
         panel.border = element_rect(color="black")) +
   labs(x=NULL,y=NULL) +
@@ -300,21 +332,24 @@ ggplot(aes(x=pop1,y=pop2,fill=fst_estimate)) +
   scale_fill_gradient(low="#D6D3CC",high="#0baf8f")
     #scale_fill_brewer(palette="RdYlGn")
 
-
-
+#------------------------------#
 lmar_fst_byInd$fsts %>%
   as_data_frame() %>%
   mutate(pop1 = colnames(.)) %>%
   pivot_longer(cols=!starts_with("pop"),names_to="pop2",values_to="fst") %>%
   left_join(fishinfo,by=c("pop1" = "ind")) %>%
   left_join(fishinfo,by=c("pop2" = "ind"),suffix=c(".pop1",".pop2")) %>%
-  mutate(diff_sl = abs(as.numeric(SL_mm.pop1)-as.numeric(SL_mm.pop2))) %>%
-  filter(!is.na(diff_sl) & !is.na(fst) & fst > 0) %>%
-  ggplot(aes(x=diff_sl,y=fst)) +
-  geom_point()
+  mutate(diff_sl = abs(as.numeric(SL_mm.pop1)-as.numeric(SL_mm.pop2)),
+         juv = case_when(juvenile.pop1 == "Y" & juvenile.pop2 == "Y" ~ "juv-juv",
+                         juvenile.pop1 == "Y" & juvenile.pop2 == "N" ~ "juv-adult",
+                         juvenile.pop1 == "N" & juvenile.pop2 == "Y" ~ "juv-adult",
+                         juvenile.pop1 == "N" & juvenile.pop2 == "N" ~ "adult-adult",
+                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ "")) %>%
+  filter(!is.na(fst) & juv != "") %>%
+  #ggplot(aes(x=fst,fill=juv)) +
+  ggdensity(x="fst",alpha=0.5,fill="juv",add="mean",rug=TRUE,palette="aaas")
+#-------------------------------#
 
-
-=======
 
 # convert to genlight object and define ploidy
 latesgen <- vcfR2genlight(lates_vcfR)
@@ -555,3 +590,8 @@ lates_fst_spp_dartR <- gl.fst.pop(latesgen_nolowcov)
 
 # calculate general stats by species
 lates_heterozyg <- gl.report.heterozygosity(latesgen_nolowcov,method="pop")
+
+
+
+
+
