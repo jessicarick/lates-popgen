@@ -1,12 +1,14 @@
 #! /bin/sh
 
 ## script for running angsd
+## NOTE: this script has been tested for angsd version: 0.931-193-gd12895d (htslib: 1.12)
+## some commands differ from previous versions of angsd! 
 
 module load gcc
-module load gsl
-module load htslib
-module load bzip2
-module load samtools
+module load gsl/2.5
+module load htslib/1.12
+module load bzip2/1.0.8
+module load samtools/1.12
 
 angsd_dir="/home/jrick/bin/angsd" 	# path to where angsd is installed
 basedir="./" 						# directory where input files are, and where results will be written
@@ -50,7 +52,7 @@ ${angsd_dir}/misc/realSFS ${basedir}angsd_output/${pop}_angsd.saf.idx -nSites 10
 awk '{for(i=1; i<=NF; i++) {a[i]+=$i; if($i!="") b[i]++}}; END {for(i=1; i<=NF; i++) printf "%s%s", a[i]/b[i], (i==NF?ORS:OFS)}' ${basedir}angsd_output/${pop}_angsd.sfs > ${basedir}angsd_output/${pop}_angsd.mean.sfs
 
 ## Step 3: Estimating theta values from SFS
-## if you want windowed theta values, add -win 5000 -step 1000 to do_stat call (with your desired window/step sizes)
+## if you want windowed theta values, add -win 5000 -step 1000 to this do_stat call (with your desired window/step sizes)
 ${angsd_dir}/misc/realSFS saf2theta ${basedir}angsd_output/${pop}_angsd.saf.idx \
 	-sfs ${basedir}angsd_output/${pop}_angsd.mean.sfs \
 	-outname ${basedir}angsd_output/${pop}_angsd
