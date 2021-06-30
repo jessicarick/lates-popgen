@@ -17,12 +17,15 @@ results.dir <- "../../../lates_popgen/results/entropy_061621/" # directory with 
 spp_list <- c("lang","lmar","lmic")
 
 for (spp in spp_list) {
+  names <- read.table(paste0(results.dir,spp,".ind"), header=T,sep=",",col.names=c("ind","pop","taxon"))
+  fishinfo <- left_join(names, details, by.x="ind", by.y="ind",
+                        all.x=T, all.y=F)
+  
   #spp <- "lsta" # used for debugging
+  spp.assign <- data.frame(names=names$ind)
+  
   for (i in 2:6){
     k <- i  
-    names <- read.table(paste0(results.dir,spp,".ind"), header=T,sep=",",col.names=c("ind","pop","taxon"))
-    fishinfo <- left_join(names, details, by.x="ind", by.y="ind",
-                          all.x=T, all.y=F)
     
     ## Extract relevant parameters from .hdf5 format
     data1.q <- h5read(paste(results.dir,spp,"_angsd.clean_ldak.k",k,".rep1.hdf5",sep=""), "q")[-c(1:4000),,]
@@ -104,6 +107,8 @@ for (spp in spp_list) {
       mutate(max = factor(max))
     q.df$assign <- q.df.max$max
     
+    spp.assign[,k] <- q.df$assign
+    
     # q.df <- q.df %>%
     #   mutate(maxq = apply(q.df,1,max)),
     #          assign2 = colnames(q.df)[apply(q.df,1,whichmax)])
@@ -133,7 +138,8 @@ for (spp in spp_list) {
             axis.text.y=element_blank(),
             axis.title.y=element_blank(),
             legend.text=element_text(size=16),
-            panel.border=element_blank()) 
+            panel.border=element_blank(),
+            plot.margin = unit(c(0,0.1,0,0.5), "cm")) 
     assign(paste0("plot.k",k),plot)
     print(plot)
   }
@@ -145,7 +151,15 @@ for (spp in spp_list) {
   assign(paste0("plot.all.",spp),plot.all)
   assign(paste0("plot.all2.",spp),plot.all2)
   
+  assign(paste0(spp,"_assignments"),spp.assign)
+  
 }
+
+ggarrange(plot.all.lang,
+          plot.all.lmar,
+          plot.all.lmic,
+          #plot.all.lsta,
+          nrow=1)
 
 ##########################
 ## all species combined ##
@@ -249,3 +263,74 @@ plot <- ggplot(q.long[!is.na(q.long$site),],
   scale_fill_manual(values=colors2[c(10,1,3,2)]) +
   geom_segment(data=anno_lines,mapping=aes(x=xmin-0.5,xend=xmax/4+0.5,y=ymin,yend=ymax),lwd=3,inherit.aes=FALSE)
 print(plot)
+
+#############################################
+
+#######
+## calculating intraspecific fst for groups
+########
+vcf.rename <- function(x) {
+  col.names <- unlist(strsplit(indNames(x),"/project/latesgenomics/jrick/latesGBS_2018/combined_noLates02/bamfiles/aln_"))
+  col.names.clean <- unlist(strsplit(col.names,".sorted.bam"))
+  col.names.clean[col.names.clean == "CEW16_135_2"] <- "CEW16_135"
+  indNames(x) <- col.names.clean
+  ploidy(x) <- 2
+  x <- gl.compliance.check(x)
+  return(x)
+}
+
+lsta_gen <- vcf.rename(vcfR2genlight(lsta_vcfR))
+lmic_gen <- vcf.rename(vcfR2genlight(lmic_vcfR))
+lmar_gen <- vcf.rename(vcfR2genlight(lmar_vcfR))
+lang_gen <- vcf.rename(vcfR2genlight(lang_vcfR))
+
+  if(sum(indNames(x) == lang_assignments$names) == length(lang_assignments$names)) {
+    mean_fst_lang <- data.frame(k=seq(1:8),mean_fst=numeric(8),overlap=logical(8))
+    for(k in 2:6){
+      pop(lang_gen) <- lang_assignments[,k]
+      fst.k <- reich.fst(lang_gen,bootstrap=100,plot=FALSE,verbose=TRUE)
+    
+      mean_fst_lang[k,2] <- mean(fst.k$fsts,na.rm=T)
+      mean_fst_lang[k,3] <- if(sum(fst.k$bootstraps$min_CI < 0) < 1){
+        FALSE
+      } else {
+        TRUE
+      }
+    } else {
+      print("names do not match. try again!")
+    }
+  }
+
+if(sum(indNames(lmar_gen) == lmar_assignments$names) == length(lmar_assignments$names)) {
+  mean_fst_lmar <- data.frame(k=seq(1:8),mean_fst=numeric(8),overlap=logical(8))
+  for(k in 2:6){
+    pop(lmar_gen) <- lmar_assignments[,k]
+    fst.k <- reich.fst(lmar_gen,bootstrap=100,plot=FALSE,verbose=TRUE)
+    
+    mean_fst_lmar[k,2] <- mean(fst.k$fsts,na.rm=T)
+    mean_fst_lmar[k,3] <- if(sum(fst.k$bootstraps$min_CI < 0) < 1){
+      FALSE
+    } else {
+      TRUE
+    }
+  }
+} else {
+  print("names do not match. try again!")
+}
+
+if(sum(indNames(lmic_gen) == lmic_assignments$names) == length(lmic_assignments$names)) {
+  mean_fst_lmic <- data.frame(k=seq(1:8),mean_fst=numeric(8),overlap=logical(8))
+  for(k in 2:6){
+    pop(lmic_gen) <- lmic_assignments[,k]
+    fst.k <- reich.fst(lmic_gen,bootstrap=100,plot=FALSE,verbose=TRUE)
+    
+    mean_fst_lmic[k,2] <- mean(fst.k$fsts,na.rm=T)
+    mean_fst_lmic[k,3] <- if(sum(fst.k$bootstraps$min_CI < 0) < 1){
+      FALSE
+    } else {
+      TRUE
+    }
+  }
+} else {
+  print("names do not match. try again!")
+}
