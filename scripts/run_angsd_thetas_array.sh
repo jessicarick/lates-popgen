@@ -1,6 +1,10 @@
 #! /bin/sh
 
 ## script for running angsd
+## written by j. rick, june 2021
+## adapted from perl script by m. haselhorst / c.a. buerkle, july 2016
+## NOTE: this script has been tested for angsd version: 0.931-193-gd12895d (htslib: 1.12)
+## some commands differ from previous versions of angsd! 
 
 #SBATCH --account=latesgenomics
 #SBATCH --time=3-00:00:00 		# shouldn't take more than a day, but gets slow with lots of individuals
