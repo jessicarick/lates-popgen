@@ -243,12 +243,13 @@ lmic3 <- ggplot(data=all_dist_lmic, aes(x=value.geo, y=value.gen.std)) +
         geom_point(alpha=0.5, col="#787876", size=6) +
         stat_smooth(method=lm,col="#787876", fill="#787876",
                     se=TRUE,lty=2,alpha=0.2,fullrange=TRUE, size=2) +
-        theme_bw() +
+        theme_custom() +
         theme(panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
               axis.title = element_text(size=18),
-              axis.text = element_text(size=14)) +
-        ylab("Genetic Distance (FST/1-FST)") +
+              axis.text = element_text(size=14),
+              plot.margin = margin(30,5,10,5)) +
+        ylab("Genetic Distance") +
         xlab("log Geographic Distance (km)")
 
 ggarrange(lmic2,lmic3,nrow=1)

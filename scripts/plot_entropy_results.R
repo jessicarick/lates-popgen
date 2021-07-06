@@ -334,3 +334,29 @@ if(sum(indNames(lmic_gen) == lmic_assignments$names) == length(lmic_assignments$
 } else {
   print("names do not match. try again!")
 }
+
+############################
+### plotting DIC for each species
+############################
+dic <- read_csv("../data/dic_results_063021.csv")
+colnames(dic)[1] <- "spp"
+
+colors <- c("#2a9d8f","#70567d","#e76f51","#e9c46a")
+
+min_points <- dic %>% 
+  pivot_longer(col=starts_with("k"),names_to="kval",values_to="model_dic") %>%
+  group_by(spp) %>%
+  slice_min(model_dic, with_ties = FALSE)
+
+
+dic %>% 
+  pivot_longer(col=starts_with("k"),names_to="kval",values_to="model_dic") %>%
+  ggplot(aes(x=kval,y=model_dic/10000,col=spp,group=spp)) +
+  geom_line(col="gray50",size=1.5) +
+  geom_point(size=4) +
+  geom_point(data=min_points,aes(x=kval,y=model_dic/10000,group=spp),size=8,col="black") +
+  ylab("Model DIC (x10000)") +
+  facet_wrap(~factor(spp,levels=c("Lsta","Lmar","Lmic","Lang")),scales="free_y",nrow=1) +
+  theme_custom() +
+  theme(strip.text = element_blank()) +
+  scale_color_manual(values=colors)
