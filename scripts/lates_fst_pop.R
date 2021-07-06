@@ -23,14 +23,14 @@ lang_vcfR <-  read.vcfR("../data/lang_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
 lmar_vcfR <-  read.vcfR("../data/lmar_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
 lmic_vcfR <-  read.vcfR("../data/lmic_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
 lsta_vcfR <-  read.vcfR("../data/lsta_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
-lsta_rad_vcfR <- read.vcfR("../data/combined_lsta_noHets3-4_variants_0.5_maf0.01.recode.vcf.gz")
+lsta_rad_vcfR <- read.vcfR("../data/combined_lsta_noHets3-4_variants_0.5_maf0.01_dp5_thin90.recode.vcf")
 
 
 #####################
 ## Cleaning up the data
 #####################
 vcfs <- c("lates_vcfR","lang_vcfR","lmar_vcfR","lmic_vcfR","lsta_vcfR","lsta_rad_vcfR")
-for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR,lsta_rad_vcfR)){
+for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR)){
   latesgen <- vcfR2genlight(v)
   
   # clean up names and import associated metadata
@@ -62,7 +62,7 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR,lsta_rad_vcfR)){
     pairedinfolates <- left_join(data.frame(Moran_ID=col.names.clean),
                                  fishinfo, by="Moran_ID", all.x=TRUE, all.y=FALSE)
     
-    pop(latesgen) <- pairedinfolates$Library
+    pop(latesgen) <- pairedinfolates$seq_library
   }
   
   
@@ -142,10 +142,10 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR,lsta_rad_vcfR)){
                                           plot=TRUE,v=2)
   
   ## extracting genotype matrix from genlight
-  lates_alleles <- t(as.matrix(latesgen_nolowcov))
-  
-  dim(lates_alleles)
-  head(colnames(lates_alleles)) ## to make sure that the names look good
+  # lates_alleles <- t(as.matrix(latesgen_nolowcov))
+  # 
+  # dim(lates_alleles)
+  # head(colnames(lates_alleles)) ## to make sure that the names look good
   
   # #################
   # ## Initial PCA
@@ -160,9 +160,9 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR,lsta_rad_vcfR)){
                              fishinfo,by="Moran_FishID",all.x=TRUE,all.y=FALSE)
   pairedinfolates[is.na(pairedinfolates)] <- "UNK"
   head(pairedinfolates) # make sure it paired okay
-  # 
-  # 
-  # ## Combining fish info with PC results 
+
+
+  # ## Combining fish info with PC results
   # if (type == "gbs") {
   #   pcaAll <- data.frame(names = pairedinfolates$Moran_FishID,
   #                        spp = factor(pairedinfolates$final_ID),
@@ -197,7 +197,7 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR,lsta_rad_vcfR)){
   # plot(pcaAll$EV1, pcaAll$EV2, pch=21, cex=2, lwd=2, bg=scales::alpha(colors2[pcaAll$site],0.6),col=colors2[pcaAll$site],
   #      xlab=paste("PC1 (", round(pcSummary$importance[2,1]*100, 1), "%)", sep=""),
   #      ylab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""))
-  # legend("topright",legend=levels(pcaAll$spp),col=scales::alpha(colors2,0.6),border=NULL,pch=19,bty="n", cex=1, pt.cex=2, pt.lwd=2, horiz=FALSE)
+  # legend("topright",legend=levels(pcaAll$site),col=scales::alpha(colors2,0.6),border=NULL,pch=19,bty="n", cex=1, pt.cex=2, pt.lwd=2, horiz=FALSE)
   # 
   # plot(pcaAll$EV2, pcaAll$EV3, pch=21, cex=2, lwd=2, bg=scales::alpha(colors2[pcaAll$site],0.6),col=colors2[pcaAll$site],
   #      xlab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""),
@@ -223,7 +223,7 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR,lsta_rad_vcfR)){
   #      ylab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
   #      cex.lab=3,cex.axis=2)
   # 
-  # plot(pcaAll$EV3, pcaAll$EV4, pch=21,  cex=4, lwd=2, bg=scales::alpha(colors[pcaAll$library],0.5), 
+  # plot(pcaAll$EV3, pcaAll$EV4, pch=21,  cex=4, lwd=2, bg=scales::alpha(colors[pcaAll$library],0.5),
   #      col=colors[pcaAll$library],
   #      xlab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
   #      ylab=paste("PC4 (", round(pcSummary$importance[2,4]*100, 1), "%)", sep=""),
@@ -233,7 +233,7 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR,lsta_rad_vcfR)){
   ## Calculate Reich-Patterson FST between populations
   #####################
   
-  pop(latesgen_nolowcov) <- pairedinfolates$ind
+  pop(latesgen_nolowcov) <- pairedinfolates$sampling_loc
   pop(latesgen.nolowcov) <- pairedinfolates$sampling_loc
   
   # lates_FST_spp_preLib <- reich.fst(latesgen.nolowcov,
@@ -241,20 +241,22 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR,lsta_rad_vcfR)){
   #                                   plot=TRUE,
   #                                   verbose=TRUE)
   
-  lates_FST_spp <- reich.fst(latesgen_nolowcov,
-                             bootstrap=100,
-                             plot=TRUE,
-                             verbose=TRUE)
+  # lates_FST_spp <- reich.fst(latesgen_nolowcov,
+  #                            bootstrap=100,
+  #                            plot=TRUE,
+  #                            verbose=TRUE)
   
   # for comparison
-  lates_fst_spp_dartR <- gl.fst.pop(latesgen_nolowcov)
+  #lates_fst_spp_dartR <- gl.fst.pop(latesgen_nolowcov)
   
   # calculate general stats by species
   lates_heterozyg <- gl.report.heterozygosity(latesgen_nolowcov,method="pop")
-
+  assign(paste0(spp,"_heterozyg"),lates_heterozyg)
+  plot(Ho~He,data=lates_heterozyg)
+  abline(a=0,b=1,lty=2)
 }
 
-lates_FST_spp$bootstraps$spp <- "Lsta"
+lates_FST_spp$bootstraps$spp <- "Lsta_RAD"
 lates_FST_all_tmp <- rbind(lates_FST_all,lates_FST_spp$bootstraps)
 lates_FST_all <- lates_FST_all_tmp
 
@@ -271,17 +273,32 @@ lates_FST_all3$fst_estimate[lates_FST_all3$fst_estimate < 0] <- 0
 write.csv(lates_FST_all3,file="../data/lates_fst_by_sampling_site.csv",row.names=FALSE)
 ################################
 
+totals <- fishinfo %>%
+  group_by(final_ID,sampling_loc) %>%
+  tally() %>%
+  filter(final_ID != "#N/A") %>%
+  mutate(spp = factor(final_ID, levels=c("Lsta","Lmar","Lmic","Lang")),
+         pop = factor(sampling_loc, levels=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                                             "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                                             "Kasanga","Total")))
+
+lates_FST_all4 <- lates_FST_all3 %>%
+  left_join(totals,by=c("pop1" = "sampling_loc", "spp" = "final_ID")) %>%
+  left_join(totals,by=c("pop2" = "sampling_loc", "spp" = "final_ID"), suffix=c("pop1","pop2")) %>%
+  mutate(ntotal = npop1 + npop2)
+
 ################################
 ## plot heatmap of fst values by species
 ################################
-lates_FST_all3 %>%
+p <- lates_FST_all3 %>%
   add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
                  "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
                  "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
-          fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
+          fst_estimate=rep(NA,10),
+          min_CI=rep(NA,10),max_CI=rep(NA,10),
           spp=rep("Lsta",10)) %>%
   add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
                  "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
@@ -307,6 +324,14 @@ lates_FST_all3 %>%
                  "Kasanga"),
           fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
           spp=rep("Lang",10)) %>%
+  add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Kasanga"),
+          fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
+          spp=rep("Lsta_RAD",10)) %>%
   mutate(pop1 = factor(pop1,
                        levels=rev(c("Kagunga","Kigoma","N_Mahale","S_Mahale",
                                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
@@ -315,22 +340,37 @@ lates_FST_all3 %>%
                        levels=rev(c("Kagunga","Kigoma","N_Mahale","S_Mahale",
                                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
                                 "Kasanga","Cameroon","Congo","Dar"))),
-         spp = factor(spp,levels=c("Lsta","Lmic","Lmar","Lang"))) %>%
-  group_by(spp) %>%
-  filter(as.integer(pop1) <= as.integer(pop2)) %>%
+         spp = factor(spp,levels=c("Lsta","Lsta_RAD","Lmic","Lmar","Lang")))  %>%
+  filter(as.integer(pop1) <= as.integer(pop2) &
+         spp != "Lsta_RAD") %>%
+  # transform(spp = factor(spp,levels=c("Lsta","Lsta_RAD","Lmic","Lmar","Lang"))) %>%
 ggplot(aes(x=pop1,y=pop2,fill=fst_estimate)) +
   geom_tile(color="black",size=0.1) +
-  geom_text(aes(label = round(fst_estimate, 3))) +
-  facet_wrap(~spp,nrow=1,drop=FALSE,strip.position="bottom") +
+  geom_text(aes(label = round(fst_estimate, 3)),
+            size=4,family="Open Sans Light") +
+  geom_text(data=hets.all.spp[hets.all.spp$spp != "Lsta_RAD",],aes(x=pop,y=pop,label=round(Ho,3)),
+            inherit.aes=FALSE,col="white",size=4,family="Open Sans Light") +
+  facet_wrap(~factor(spp,levels=c("Lsta","Lmic","Lmar","Lang")),nrow=1,drop=FALSE,strip.position="top") +
   theme_custom() +
-  theme(axis.text.x = element_text(angle=45,hjust=1),
-        #strip.text = element_blank(),
-        panel.spacing = unit(3.5, "lines"),
-        panel.border = element_rect(color="black")) +
+  theme(axis.text.x = element_text(angle=45,hjust=0),
+        strip.text = element_blank(),
+        panel.spacing = unit(5, "lines"),
+        panel.border = element_rect(color="white"),
+        axis.line.x.top = element_line(color="black"),
+        axis.line.y.left = element_line(color="black")) +
   labs(x=NULL,y=NULL) +
   #scale_fill_viridis(name="FST",option="plasma",direction=-1,end=0.6)
-  scale_fill_gradient(low="#D6D3CC",high="#0baf8f")
+  scale_fill_gradient(low="#D6D3CC",high="#0baf8f") +
+  scale_x_discrete(limits=c(rev(c("Kagunga","Kigoma","N_Mahale","S_Mahale",
+                                  "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                                  "Kasanga"))),
+                   position="top") +
+  scale_y_discrete(limits=c(rev(c("","Kagunga","Kigoma","N_Mahale","S_Mahale",
+                                  "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                                  "Kasanga"))))
     #scale_fill_brewer(palette="RdYlGn")
+
+p + geom_text(data=totals,aes(y=11,x=pop,label=n,fill=NULL),col="red",family="Open Sans",size=5)
 
 #------------------------------#
 lmar_fst_byInd$fsts %>%
@@ -353,6 +393,8 @@ lmar_fst_byInd$fsts %>%
 
 # convert to genlight object and define ploidy
 latesgen <- vcfR2genlight(lates_vcfR)
+ploidy(latesgen) <- 2
+latesgen <- gl.compliance.check(latesgen)
 
 # clean up names and import associated metadata
 if (type == "gbs") {
@@ -370,7 +412,6 @@ if (type == "gbs") {
                                all.x=TRUE, all.y=FALSE)
   
   #pairedinfolates$Library[pairedinfolates$Library == "lates02lates03"] <- "lates03"
-  pop(latesgen) <- pairedinfolates$seq_library
   
 } else if (type == "rad") {
   col.names <- unlist(strsplit(indNames(latesgen),"/project/latesgenomics/jrick/latesGBS_2018/combined_all/bwa_all_rad/aln_"))
@@ -387,8 +428,6 @@ if (type == "gbs") {
 }
 
 # now, filter out any individuals with > 50% missing data
-ploidy(latesgen) <- 2
-latesgen <- gl.compliance.check(latesgen)
 latesgen.nolowcov <- gl.filter.callrate(latesgen,method="ind",
                                         threshold=0.5,mono.rm=TRUE,
                                         recalc=FALSE,plot=TRUE,v=2) #TODO -- remove?
@@ -397,6 +436,7 @@ latesgen.nolowcov <- gl.filter.callrate(latesgen,method="ind",
 ## Library effects filter
 ## filtering SNPs found only in one group or the other
 #####################
+pop(latesgen.nolowcov) <- pairedinfolates$seq_library
 
 if (type == "gbs"){
   lates01 <- gl.keep.pop(latesgen.nolowcov,
@@ -572,8 +612,8 @@ p
 ## Calculate Reich-Patterson FST between species
 #####################
 
-pop(latesgen_nolowcov) <- pcaAll$spp
-pop(latesgen.nolowcov) <- pcaAll$spp
+pop(latesgen_nolowcov) <- pairedinfolates$final_ID
+pop(latesgen.nolowcov) <- pairedinfolates$final_ID
 
 lates_FST_spp_preLib <- reich.fst(latesgen.nolowcov,
                            bootstrap=100,

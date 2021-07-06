@@ -5,6 +5,7 @@
 source("packages_funcs.R")
 
 lsta_vcfR<-read.vcfR("../data/lsta_092320_0.5_maf0.01_thin90_dp10.recode.vcf")
+lsta_vcfR <- read.vcfR("../data/combined_lsta_noHets3-4_variants_0.5_maf0.01_dp5_thin90.recode.vcf")
 lsta <- vcfR2genlight(lsta_vcfR)
 
 #latesgen <- vcfR2genlight(lates_vcfR)
@@ -296,12 +297,13 @@ lsta3 <- ggplot(data=all_dist_lsta, aes(x=value.geo, y=value.gen.std)) +
         geom_point(alpha=0.5, col="#787876", size=6) +
         stat_smooth(method=lm,col="#787876", fill="#787876",
                     se=TRUE,lty=2,alpha=0.2,fullrange=TRUE, size=2) +
-        theme_bw() +
+        theme_custom() +
         theme(panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
               axis.title = element_text(size=18),
-              axis.text = element_text(size=14)) +
-        ylab("Genetic Distance (FST/1-FST)") +
+              axis.text = element_text(size=14),
+              plot.margin = margin(30,5,10,5)) +
+        ylab("Genetic Distance") +
         xlab("log Geographic Distance (km)")
 
 ggarrange(lsta2,lsta3,nrow=1)
@@ -440,3 +442,5 @@ as.data.frame(Dgen_lsta$fsts) %>%
 # all_dist_lsta_ind$value.gen.std <- all_dist_lsta_ind$value.gen/(1-all_dist_lsta_ind$value.gen)
 # 
 # plot(value.gen.std ~ value.geo, data=all_dist_lsta_ind)
+
+
