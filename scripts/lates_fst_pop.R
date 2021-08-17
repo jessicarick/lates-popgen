@@ -1,7 +1,7 @@
 ###################
 ## Script for fst calculations
 ##
-## Analysis for Rick et al., in prep
+## Analysis for Rick et al., J Hered
 ## Written by J. Rick, jrick@uwyo.edu
 ## Last update: Summer 2021
 ###################
@@ -13,27 +13,28 @@
 source("packages_funcs.R")
 
 ## Importing the SNP data and metadata
-## working with the dataset created with the following filters (from VCFtools): 
-## missing data allowed = 50%, MAF = 0.01 cutoff
+## working with the datasets created with the following filters (from VCFtools): 
+## missing data allowed = 50%, MAF = 0.01 cutoff, min depth = 5, thinned 90bp
 
-## Toggle for working with gbs vs rad data
-type <- "gbs"
-lates_vcfR <- read.vcfR("../data/lates_all_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
-lang_vcfR <-  read.vcfR("../data/lang_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
-lmar_vcfR <-  read.vcfR("../data/lmar_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
-lmic_vcfR <-  read.vcfR("../data/lmic_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
-lsta_vcfR <-  read.vcfR("../data/lsta_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lates_vcfR <- read.vcfR("../../lates_popgen_github_copy/data/lates_all_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lang_vcfR <-  read.vcfR("../../lates_popgen_github_copy/data/lang_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lmar_vcfR <-  read.vcfR("../../lates_popgen_github_copy/data/lmar_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lmic_vcfR <-  read.vcfR("../../lates_popgen_github_copy/data/lmic_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lsta_vcfR <-  read.vcfR("../../lates_popgen_github_copy/data/lsta_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
 lsta_rad_vcfR <- read.vcfR("../data/combined_lsta_noHets3-4_variants_0.5_maf0.01_dp5_thin90.recode.vcf")
-
 
 #####################
 ## Cleaning up the data
 #####################
-vcfs <- c("lates_vcfR","lang_vcfR","lmar_vcfR","lmic_vcfR","lsta_vcfR","lsta_rad_vcfR")
-for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR)){
+vcfs <- c(lates_vcfR,lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR,lsta_rad_vcfR)
+vcf_names <- c("lates_vcfR","lang_vcfR","lmar_vcfR","lmic_vcfR","lsta_vcfR","lsta_rad_vcfR")
+for(i in 1:length(vcfs)){
+  v <- vcfs[i]
   latesgen <- vcfR2genlight(v)
+  type <- case_when(vcf_names[i] == "lsta_rad_vcfR" ~ "rad",
+                    TRUE ~ "gbs")
   
-  # clean up names and import associated metadata
+    # clean up names and import associated metadata
     if (type == "gbs") {
     col.names <- unlist(strsplit(indNames(latesgen),"/project/latesgenomics/jrick/latesGBS_2018/combined_noLates02/bamfiles/aln_"))
     col.names.clean <- unlist(strsplit(col.names,".sorted.bam"))
@@ -143,116 +144,22 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR)){
                                           recalc=FALSE,
                                           plot=TRUE,v=2)
   
-  ## extracting genotype matrix from genlight
-  # lates_alleles <- t(as.matrix(latesgen_nolowcov))
-  # 
-  # dim(lates_alleles)
-  # head(colnames(lates_alleles)) ## to make sure that the names look good
-  
-  # #################
-  # ## Initial PCA
-  # #################
-  # 
-  # lates_pca <- do.pca(lates_alleles)
-  # pcSummary <- summary(lates_pca)
-  # scree <- plot(lates_pca, type="lines") 
-  # 
+
   ## Pull metadata associated with individuals in the dataset
-  pairedinfolates<-left_join(data.frame(Moran_FishID=indNames(latesgen_nolowcov)),
+  pairedinfolates <- left_join(data.frame(Moran_FishID=indNames(latesgen_nolowcov)),
                              fishinfo,by="Moran_FishID",all.x=TRUE,all.y=FALSE)
   pairedinfolates[is.na(pairedinfolates)] <- "UNK"
   head(pairedinfolates) # make sure it paired okay
 
+  
+  #####################
+  ## Calculate site-level heterozygosity
+  #####################
 
-  # ## Combining fish info with PC results
-  # if (type == "gbs") {
-  #   pcaAll <- data.frame(names = pairedinfolates$Moran_FishID,
-  #                        spp = factor(pairedinfolates$final_ID),
-  #                        fieldID = factor(pairedinfolates$pheno_ID),
-  #                        site = factor(pairedinfolates$sampling_loc),
-  #                        library = factor(pairedinfolates$seq_library),
-  #                        sex = factor(pairedinfolates$pheno_sex),
-  #                        EV1 = lates_pca$x[,1],    # the first eigenvector
-  #                        EV2 = lates_pca$x[,2],    # the second eigenvector
-  #                        EV3 = lates_pca$x[,3],    # the third eigenvector
-  #                        EV4 = lates_pca$x[,4],
-  #                        EV5 = lates_pca$x[,5],
-  #                        stringsAsFactors = FALSE)
-  # } else if (type == "rad") {
-  #   pcaAll <- data.frame(names = pairedinfolates$Indv_ID,
-  #                        spp = factor(pairedinfolates$Spp),
-  #                        site = factor(pairedinfolates$Location),
-  #                        library = factor(pairedinfolates$Library),
-  #                        sex = factor(pairedinfolates$Sex),
-  #                        EV1 = lates_pca$x[,1],    # the first eigenvector
-  #                        EV2 = lates_pca$x[,2],    # the second eigenvector
-  #                        EV3 = lates_pca$x[,3],    # the third eigenvector
-  #                        EV4 = lates_pca$x[,4],
-  #                        EV5 = lates_pca$x[,5],
-  #                        stringsAsFactors = FALSE)
-  # }
-  # 
-  # ## Now, plotting the PCA results
-  # 
-  # # colored by sampling site
-  # par(oma=c(1,1,1,2), xpd=TRUE, mar=c(5.1, 4.1, 4.1, 1),mfrow=c(1,3))
-  # plot(pcaAll$EV1, pcaAll$EV2, pch=21, cex=2, lwd=2, bg=scales::alpha(colors2[pcaAll$site],0.6),col=colors2[pcaAll$site],
-  #      xlab=paste("PC1 (", round(pcSummary$importance[2,1]*100, 1), "%)", sep=""),
-  #      ylab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""))
-  # legend("topright",legend=levels(pcaAll$site),col=scales::alpha(colors2,0.6),border=NULL,pch=19,bty="n", cex=1, pt.cex=2, pt.lwd=2, horiz=FALSE)
-  # 
-  # plot(pcaAll$EV2, pcaAll$EV3, pch=21, cex=2, lwd=2, bg=scales::alpha(colors2[pcaAll$site],0.6),col=colors2[pcaAll$site],
-  #      xlab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""),
-  #      ylab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""))
-  # 
-  # plot(pcaAll$EV3, pcaAll$EV4, pch=21, cex=2, lwd=2, bg=scales::alpha(colors2[pcaAll$site],0.6),col=colors2[pcaAll$site],
-  #      xlab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
-  #      ylab=paste("PC4 (", round(pcSummary$importance[2,4]*100, 1), "%)", sep=""))
-  # 
-  # # colored by library (to make sure library effects are gone)
-  # plot.new()
-  # par(mar=c(6,6,1,4),mfrow=c(1,3),xpd=TRUE, oma=c(2,2,1,2))
-  # plot(pcaAll$EV1, pcaAll$EV2, pch=21, cex=4, lwd=2, bg=scales::alpha(colors[pcaAll$library],0.5),
-  #      col=colors[pcaAll$library],
-  #      xlab=paste("PC1 (", round(pcSummary$importance[2,1]*100, 1), "%)", sep=""),
-  #      ylab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""),
-  #      cex.lab=3,cex.axis=2)
-  # legend("bottomleft",legend=levels(pcaAll$library),col=scales::alpha(colors,0.6),border=NULL,pch=19,bty="n", cex=2, pt.cex=2, pt.lwd=2, horiz=FALSE)
-  # 
-  # plot(pcaAll$EV2, pcaAll$EV3, pch=21,  cex=4, lwd=2, bg=scales::alpha(colors[pcaAll$library],0.5),
-  #      col=colors[pcaAll$library],
-  #      xlab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""),
-  #      ylab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
-  #      cex.lab=3,cex.axis=2)
-  # 
-  # plot(pcaAll$EV3, pcaAll$EV4, pch=21,  cex=4, lwd=2, bg=scales::alpha(colors[pcaAll$library],0.5),
-  #      col=colors[pcaAll$library],
-  #      xlab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
-  #      ylab=paste("PC4 (", round(pcSummary$importance[2,4]*100, 1), "%)", sep=""),
-  #      cex.lab=3,cex.axis=2)
-  
-  #####################
-  ## Calculate Reich-Patterson FST between populations
-  #####################
-  
-  pop(latesgen_nolowcov) <- pairedinfolates$ind
-  pop(latesgen.nolowcov) <- pairedinfolates$ind
-  
-  # lates_FST_spp_preLib <- reich.fst(latesgen.nolowcov,
-  #                                   bootstrap=100,
-  #                                   plot=TRUE,
-  #                                   verbose=TRUE)
-  
-  # lates_FST_spp <- reich.fst(latesgen_nolowcov,
-  #                            bootstrap=100,
-  #                            plot=TRUE,
-  #                            verbose=TRUE)
-  
-  # for comparison
-  #lates_fst_spp_dartR <- gl.fst.pop(latesgen_nolowcov)
-  
-  # calculate general stats by species
-  lates_heterozyg <- gl.report.heterozygosity(latesgen_nolowcov,method="pop")
+  pop(latesgen_nolowcov) <- pairedinfolates$sampling_loc
+  spp <- pairedinfolates$final_ID[1]
+  lates_heterozyg <- gl.report.heterozygosity(latesgen_nolowcov,method="pop") %>%
+    mutate(spp=spp)
   assign(paste0(spp,"_heterozyg"),lates_heterozyg)
   plot(Ho~He,data=lates_heterozyg)
   abline(a=0,b=1,lty=2)
@@ -292,539 +199,138 @@ lates_FST_all4 <- lates_FST_all3 %>%
 ################################
 ## plot heatmap of fst values by species
 ################################
-p <- lates_FST_all3 %>%
+hets.all.spp <- Lsta_heterozyg %>%
+  bind_rows(Lang_heterozyg) %>%
+  bind_rows(Lmar_heterozyg) %>%
+  bind_rows(Lmic_heterozyg)
+
+lates_FST_all3 <- read_csv("../data/lates_fst_by_sampling_site.csv")
+lates_FST_plot_data <- lates_FST_all3 %>%
   add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           fst_estimate=rep(NA,10),
           min_CI=rep(NA,10),max_CI=rep(NA,10),
           spp=rep("Lsta",10)) %>%
   add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
           spp=rep("Lmic",10)) %>%
   add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
           spp=rep("Lmar",10)) %>%
   add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
           spp=rep("Lang",10)) %>%
   add_row(pop1=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           pop2=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                 "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                 "Ikola","Mpinbwe","Kirando","Wampembe",
                  "Kasanga"),
           fst_estimate=rep(NA,10),min_CI=rep(NA,10),max_CI=rep(NA,10),
           spp=rep("Lsta_RAD",10)) %>%
   mutate(pop1 = factor(pop1,
                        levels=rev(c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                                "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                                "Ikola","Mpinbwe","Kirando","Wampembe",
                                 "Kasanga","Cameroon","Congo","Dar"))),
          pop2 = factor(pop2,
                        levels=rev(c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                                "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                                "Ikola","Mpinbwe","Kirando","Wampembe",
                                 "Kasanga","Cameroon","Congo","Dar"))),
          spp = factor(spp,levels=c("Lsta","Lsta_RAD","Lmic","Lmar","Lang")))  %>%
   filter(as.integer(pop1) <= as.integer(pop2) &
          spp != "Lsta_RAD") %>%
   # transform(spp = factor(spp,levels=c("Lsta","Lsta_RAD","Lmic","Lmar","Lang"))) %>%
-ggplot(aes(x=pop1,y=pop2,fill=fst_estimate)) +
-  geom_tile(color="black",size=0.1) +
-  geom_text(aes(label = round(fst_estimate, 3)),
-            size=4,family="Open Sans Light") +
+  mutate(fill_col=case_when(min_CI <= 0 ~ NA_real_,
+                            fst_estimate > 0 ~ fst_estimate))
+
+p <- ggplot(data=lates_FST_plot_data) +
+  geom_tile(aes(x=pop1,y=pop2,fill=fill_col),color="black",size=0.1) +
+  geom_text(aes(x=pop1,y=pop2,label = round(fst_estimate, 3)),
+            size=4,family="Open Sans") +
+  geom_tile(data=filter(lates_FST_plot_data,pop1 == pop2),aes(x=pop1,y=pop2),color="black",fill="gray30",size=0.1) +
   geom_text(data=hets.all.spp[hets.all.spp$spp != "Lsta_RAD",],aes(x=pop,y=pop,label=round(Ho,3)),
-            inherit.aes=FALSE,col="white",size=4,family="Open Sans Light") +
-  facet_wrap(~factor(spp,levels=c("Lsta","Lmic","Lmar","Lang")),nrow=1,drop=FALSE,strip.position="top") +
+            inherit.aes=FALSE,col="white",size=4,family="Open Sans") +
+  facet_wrap(~factor(spp,levels=c("Lsta","Lmic","Lmar","Lang")),nrow=2,drop=FALSE,strip.position="top",scales="free") +
   theme_custom() +
   theme(axis.text.x = element_text(angle=45,hjust=0),
         strip.text = element_blank(),
-        panel.spacing = unit(5, "lines"),
+        panel.spacing = unit(2, "lines"),
         panel.border = element_rect(color="white"),
         axis.line.x.top = element_line(color="black"),
-        axis.line.y.left = element_line(color="black")) +
+        axis.line.y.left = element_line(color="black"),
+        legend.position="none",
+        plot.margin = unit(c(0,1,0,0), "cm")) +
   labs(x=NULL,y=NULL) +
-  #scale_fill_viridis(name="FST",option="plasma",direction=-1,end=0.6)
-  scale_fill_gradient(low="#D6D3CC",high="#0baf8f") +
+  # scale_fill_viridis(name="FST",option="inferno",begin=0.6,direction=-1,na.value="#D6D3CC",
+  #                    guide = guide_colorbar(frame.colour = "black", ticks.colour = "black"))+
+  scale_fill_gradient(low="#f6e551",high="#e76f51",na.value="#D6D3CC",
+                      guide = guide_colorbar(frame.colour = "black", ticks.colour = "black")) +
   scale_x_discrete(limits=c(rev(c("Kagunga","Kigoma","N_Mahale","S_Mahale",
-                                  "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                                  "Ikola","Mpinbwe","Kirando","Wampembe",
                                   "Kasanga"))),
                    position="top") +
   scale_y_discrete(limits=c(rev(c("","Kagunga","Kigoma","N_Mahale","S_Mahale",
-                                  "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
+                                  "Ikola","Mpinbwe","Kirando","Wampembe",
                                   "Kasanga"))))
     #scale_fill_brewer(palette="RdYlGn")
 
-p + geom_text(data=totals,aes(y=11,x=pop,label=n,fill=NULL),col="red",family="Open Sans",size=5)
-
-#------------------------------#
-## CALCULATING INDIVIDUAL-LEVEL FST
-
-pop(lang_gen) <- indNames(lang_gen)
-lang_fst_ind <- reich.fst(lang_gen,bootstrap=FALSE,plot=FALSE,verbose=TRUE)
-pop(lmar_gen) <- indNames(lmar_gen)
-lmar_fst_ind <- reich.fst(lmar_gen,bootstrap=FALSE,plot=FALSE,verbose=TRUE)
-pop(lmic_gen) <- indNames(lmic_gen)
-lmic_fst_ind  <- reich.fst(lmic_gen,bootstrap=FALSE,plot=FALSE,verbose=TRUE)
-pop(lsta_gen) <- indNames(lsta_gen)
-lsta_fst_ind  <- reich.fst(lsta_gen,bootstrap=FALSE,plot=FALSE,verbose=TRUE)
-
-lmar_fst_ind$fsts %>%
-  as_data_frame() %>%
-  mutate(pop1 = colnames(.)) %>%
-  pivot_longer(cols=!starts_with("pop"),names_to="pop2",values_to="fst") %>%
-  left_join(fishinfo,by=c("pop1" = "ind")) %>%
-  left_join(fishinfo,by=c("pop2" = "ind"),suffix=c(".pop1",".pop2")) %>%
-  mutate(diff_sl = abs(as.numeric(SL_mm.pop1)-as.numeric(SL_mm.pop2)),
-         juv = case_when(juvenile.pop1 == "Y" & juvenile.pop2 == "Y" ~ "juv-juv",
-                         juvenile.pop1 == "Y" & juvenile.pop2 == "N" ~ "juv-adult",
-                         juvenile.pop1 == "N" & juvenile.pop2 == "Y" ~ "juv-adult",
-                         juvenile.pop1 == "N" & juvenile.pop2 == "N" ~ "adult-adult",
-                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ ""),
-         sampling_season.pop1 = case_when(sampling_month.pop1 == "August" ~ "Fall",
-                                          sampling_month.pop1 == "September" ~ "Fall",
-                                          sampling_month.pop1 == "May" ~ "Spring",
-                                          sampling_month.pop1 == "July" ~ "Summer",
-                                          sampling_month.pop1 == "" ~ ""),
-         sampling_season.pop2 = case_when(sampling_month.pop2 == "August" ~ "Fall",
-                                          sampling_month.pop2 == "September" ~ "Fall",
-                                          sampling_month.pop2 == "May" ~ "Spring",
-                                          sampling_month.pop2 == "July" ~ "Summer",
-                                          sampling_month.pop2 == "" ~ ""),
-         combined_month = paste0(sampling_month.pop1,"-",sampling_month.pop2),
-         combined_season = case_when(sampling_season.pop1 == sampling_season.pop2 ~ sampling_season.pop1,
-                                     sampling_season.pop1 != sampling_season.pop2 ~ paste0(sampling_season.pop1,"-",sampling_season.pop2)),
-         combined_season = case_when(combined_season %in% c("Fall-Spring","Spring-Fall") ~ "Spring-Fall",
-                                     combined_season %in% c("Fall-Summer", "Summer-Fall") ~ "Summer-Fall",
-                                     combined_season %in% c("Spring-Summer","Summer-Spring") ~ "Spring-Summer",
-                                     TRUE ~ combined_season)) %>%
-  left_join(Dgeo_lmar_long,by=c("sampling_loc.pop1" = "Var1","sampling_loc.pop2" = "Var2")) %>%
-  left_join(Dgeo_lmar_long,by=c("sampling_loc.pop1" = "Var2", "sampling_loc.pop2" = "Var1")) %>%
-  mutate(geo_dist_km = case_when(value.x > 0 ~ value.x,
-                                 value.y > 0 ~ value.y)) %>%
-  # group_by(juv) %>%
-  # do(fitJuv = tidy(lm((fst/(1-fst)) ~ log(geo_dist_km), data=.))) %>%
-  # unnest(fitJuv)
-  filter(!is.na(fst) & sampling_month.pop1 != "" & sampling_month.pop2 != "" & juv == "juv-juv"
-           # sampling_year.pop1 %in% c("2017","2018") &
-           # sampling_year.pop2 %in% c("2017","2018")
-         ) %>%
-  ggplot() +
-    geom_jitter(aes(x=combined_season,y=fst,fill=juv),size=4,pch=21, alpha=0.7,width=0.1,height=0) +
-    geom_boxplot(aes(x=combined_season,y=fst),fill=NA,outlier.color=NA) +
-    #geom_point(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv,fill=juv)) +
-    #geom_smooth(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv),method="lm",lty=2,lwd=2) +
-    #geom_point(aes(x=diff_sl,y=fst)) +
-    #geom_smooth(aes(x=diff_sl,y=fst),method="lm",lty=2,lwd=2,col="black") +
-    theme_custom() +
-    scale_fill_npg()
-    theme_custom()
-  ggdensity(x="fst",alpha=0.5,fill="juv",add="mean",rug=TRUE,palette="aaas")
-
-lang_fst_ind$fsts %>%
-  as_data_frame() %>%
-  mutate(pop1 = colnames(.)) %>%
-  pivot_longer(cols=!starts_with("pop"),names_to="pop2",values_to="fst") %>%
-  left_join(fishinfo,by=c("pop1" = "ind")) %>%
-  left_join(fishinfo,by=c("pop2" = "ind"),suffix=c(".pop1",".pop2")) %>%
-  mutate(diff_sl = abs(as.numeric(SL_mm.pop1)-as.numeric(SL_mm.pop2)),
-         juv = case_when(juvenile.pop1 == "Y" & juvenile.pop2 == "Y" ~ "juv-juv",
-                         juvenile.pop1 == "Y" & juvenile.pop2 == "N" ~ "juv-adult",
-                         juvenile.pop1 == "N" & juvenile.pop2 == "Y" ~ "juv-adult",
-                         juvenile.pop1 == "N" & juvenile.pop2 == "N" ~ "adult-adult",
-                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ ""),
-         sampling_season.pop1 = case_when(sampling_month.pop1 == "August" ~ "Fall",
-                                          sampling_month.pop1 == "September" ~ "Fall",
-                                          sampling_month.pop1 == "May" ~ "Spring",
-                                          sampling_month.pop1 == "July" ~ "Summer",
-                                          sampling_month.pop1 == "" ~ ""),
-         sampling_season.pop2 = case_when(sampling_month.pop2 == "August" ~ "Fall",
-                                          sampling_month.pop2 == "September" ~ "Fall",
-                                          sampling_month.pop2 == "May" ~ "Spring",
-                                          sampling_month.pop2 == "July" ~ "Summer",
-                                          sampling_month.pop2 == "" ~ ""),
-         combined_month = paste0(sampling_month.pop1,"-",sampling_month.pop2),
-         combined_season = case_when(sampling_season.pop1 == sampling_season.pop2 ~ "same",
-                                     sampling_season.pop1 != sampling_season.pop2 ~ "different"),
-         combined_season = case_when(combined_season %in% c("Fall-Spring","Spring-Fall") ~ "Spring-Fall",
-                                     combined_season %in% c("Fall-Summer", "Summer-Fall") ~ "Summer-Fall",
-                                     combined_season %in% c("Spring-Summer","Summer-Spring") ~ "Spring-Summer",
-                                     TRUE ~ combined_season)) %>%
-  left_join(Dgeo_lang_long,by=c("sampling_loc.pop1" = "Var1","sampling_loc.pop2" = "Var2")) %>%
-  left_join(Dgeo_lang_long,by=c("sampling_loc.pop1" = "Var2", "sampling_loc.pop2" = "Var1")) %>%
-  mutate(geo_dist_km = case_when(value.x > 0 ~ value.x,
-                                 value.y > 0 ~ value.y)) %>%
-  #filter(!is.na(fst)) %>%
-  filter(!is.na(fst)  & sampling_month.pop1 != "" & sampling_month.pop2 != "" & juv == "juv-juv") %>%
-  # group_by(juv) %>%
-  # do(fitJuv = tidy(lm((fst/(1-fst)) ~ log(geo_dist_km), data=.))) %>%
-  # unnest(fitJuv)
-  # 
-  ggplot() +
-  geom_jitter(aes(x=combined_season,y=fst,fill=juv),size=4,pch=21, alpha=0.7,width=0.1,height=0.0001) +
-  geom_boxplot(aes(x=combined_season,y=fst),fill=NA,outlier.color=NA) +
-  #geom_jitter(aes(x=juv,y=fst,fill=juv),size=4,pch=21, width=0.1,height=0.0005,alpha=0.7) +
-    #geom_boxplot(aes(x=juv,y=fst),fill=NA,outlier.color=NA) +
-    # geom_point(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv,fill=juv)) +
-    # geom_smooth(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv),method="lm",lty=2,lwd=2) +
-    #geom_point(aes(x=diff_sl,y=fst)) +
-    #geom_smooth(aes(x=diff_sl,y=fst),method="lm",lty=2,lwd=2,col="black") +
-    theme_custom() +
-    scale_fill_npg()
-  ggdensity(x="fst",alpha=0.5,fill="juv",add="mean",rug=TRUE,palette="aaas",col="juv")
-
-lmic_fst_ind$fsts %>%
-  as_data_frame() %>%
-  mutate(pop1 = colnames(.)) %>%
-  pivot_longer(cols=!starts_with("pop"),names_to="pop2",values_to="fst") %>%
-  left_join(fishinfo,by=c("pop1" = "ind")) %>%
-  left_join(fishinfo,by=c("pop2" = "ind"),suffix=c(".pop1",".pop2")) %>%
-  mutate(diff_sl = abs(as.numeric(SL_mm.pop1)-as.numeric(SL_mm.pop2)),
-         juv = case_when(juvenile.pop1 == "Y" & juvenile.pop2 == "Y" ~ "juv-juv",
-                         juvenile.pop1 == "Y" & juvenile.pop2 == "N" ~ "juv-adult",
-                         juvenile.pop1 == "N" & juvenile.pop2 == "Y" ~ "juv-adult",
-                         juvenile.pop1 == "N" & juvenile.pop2 == "N" ~ "adult-adult",
-                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ ""),
-         sampling_season.pop1 = case_when(sampling_month.pop1 == "August" ~ "Fall",
-                                          sampling_month.pop1 == "September" ~ "Fall",
-                                          sampling_month.pop1 == "May" ~ "Spring",
-                                          sampling_month.pop1 == "July" ~ "Summer",
-                                          sampling_month.pop1 == "" ~ ""),
-         sampling_season.pop2 = case_when(sampling_month.pop2 == "August" ~ "Fall",
-                                          sampling_month.pop2 == "September" ~ "Fall",
-                                          sampling_month.pop2 == "May" ~ "Spring",
-                                          sampling_month.pop2 == "July" ~ "Summer",
-                                          sampling_month.pop2 == "" ~ ""),
-         combined_month = paste0(sampling_month.pop1,"-",sampling_month.pop2),
-         combined_season = case_when(sampling_season.pop1 == sampling_season.pop2 ~ "same",
-                                     sampling_season.pop1 != sampling_season.pop2 ~ "different")) %>%
-  left_join(Dgeo_lmic_long,by=c("sampling_loc.pop1" = "Var1","sampling_loc.pop2" = "Var2")) %>%
-  left_join(Dgeo_lmic_long,by=c("sampling_loc.pop1" = "Var2", "sampling_loc.pop2" = "Var1")) %>%
-  mutate(geo_dist_km = case_when(value.x > 0 ~ value.x,
-                                 value.y > 0 ~ value.y)) %>%
-  # group_by(juv) %>%
-  # do(fitJuv = tidy(lm((fst/(1-fst)) ~ log(geo_dist_km), data=.))) %>%
-  # unnest(fitJuv)
-  filter(!is.na(fst)  & sampling_month.pop1 != "" & sampling_month.pop2 != "" & juv == "juv-juv") %>%
-  ggplot() +
-  geom_jitter(aes(x=combined_season,y=fst,fill=juv),size=4,pch=21, alpha=0.7,width=0.1,height=0) +
-  geom_boxplot(aes(x=combined_season,y=fst),fill=NA,outlier.color=NA) +
-  # geom_jitter(aes(x=juv,y=fst,fill=juv),size=4,pch=21, width=0.1,height=0.0005,alpha=0.7) +
-    # geom_boxplot(aes(x=juv,y=fst),fill=NA,outlier.color=NA) +
-    # geom_point(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv,fill=juv)) +
-    # geom_smooth(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv),method="lm",lty=2,lwd=2) +
-    #geom_point(aes(x=diff_sl,y=fst)) +
-    #geom_smooth(aes(x=diff_sl,y=fst),method="lm",lty=2,lwd=2) +
-    theme_custom() +
-    scale_fill_npg()
-  theme_custom()
-#ggdensity(x="fst",alpha=0.5,fill="juv",add="mean",rug=TRUE,palette="aaas")
-
-lsta_fst_ind$fsts %>%
-  as_data_frame() %>%
-  mutate(pop1 = colnames(.)) %>%
-  pivot_longer(cols=!starts_with("pop"),names_to="pop2",values_to="fst") %>%
-  left_join(fishinfo,by=c("pop1" = "ind")) %>%
-  left_join(fishinfo,by=c("pop2" = "ind"),suffix=c(".pop1",".pop2")) %>%
-  mutate(diff_sl = abs(as.numeric(SL_mm.pop1)-as.numeric(SL_mm.pop2)),
-         juv = case_when(juvenile.pop1 == "Y" & juvenile.pop2 == "Y" ~ "juv-juv",
-                         juvenile.pop1 == "Y" & juvenile.pop2 == "N" ~ "juv-adult",
-                         juvenile.pop1 == "N" & juvenile.pop2 == "Y" ~ "juv-adult",
-                         juvenile.pop1 == "N" & juvenile.pop2 == "N" ~ "adult-adult",
-                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ ""),
-         sampling_season.pop1 = case_when(sampling_month.pop1 == "August" ~ "Fall",
-                                          sampling_month.pop1 == "September" ~ "Fall",
-                                          sampling_month.pop1 == "May" ~ "Spring",
-                                          sampling_month.pop1 == "July" ~ "Summer",
-                                          sampling_month.pop1 == "" ~ ""),
-         sampling_season.pop2 = case_when(sampling_month.pop2 == "August" ~ "Fall",
-                                          sampling_month.pop2 == "September" ~ "Fall",
-                                          sampling_month.pop2 == "May" ~ "Spring",
-                                          sampling_month.pop2 == "July" ~ "Summer",
-                                          sampling_month.pop2 == "" ~ ""),
-         combined_month = paste0(sampling_month.pop1,"-",sampling_month.pop2),
-         combined_season = case_when(sampling_season.pop1 == sampling_season.pop2 ~ sampling_season.pop1,
-                                     sampling_season.pop1 != sampling_season.pop2 ~ paste0(sampling_season.pop1,"-",sampling_season.pop2)),
-         combined_season = case_when(combined_season %in% c("Fall-Spring","Spring-Fall") ~ "Spring-Fall",
-                                     combined_season %in% c("Fall-Summer", "Summer-Fall") ~ "Summer-Fall",
-                                     combined_season %in% c("Spring-Summer","Summer-Spring") ~ "Spring-Summer",
-                                     TRUE ~ combined_season)) %>%
-  left_join(Dgeo_lsta_long,by=c("sampling_loc.pop1" = "Var1","sampling_loc.pop2" = "Var2")) %>%
-  left_join(Dgeo_lsta_long,by=c("sampling_loc.pop1" = "Var2", "sampling_loc.pop2" = "Var1")) %>%
-  mutate(geo_dist_km = case_when(value.x > 0 ~ value.x,
-                                 value.y > 0 ~ value.y)) %>%
-  # group_by(juv) %>%
-  filter(!is.na(fst)  & sampling_month.pop1 != "" & sampling_month.pop2 != "" ) %>%
-  # do(fitJuv = tidy(lm(fst ~ diff_sl, data=.))) %>%
-  # unnest(fitJuv)
-
-  ggplot() +
-    geom_jitter(aes(x=combined_season,y=fst,fill=juv),size=4,pch=21, alpha=0.7,width=0.1,height=0.0001) +
-    geom_boxplot(aes(x=combined_season,y=fst),fill=NA,outlier.color=NA) +
-    #geom_jitter(aes(x=juv,y=fst,fill=juv),size=4,pch=21, width=0.1,height=0.0005,alpha=0.7) +
-  #geom_boxplot(aes(x=juv,y=fst),fill=NA,outlier.color=NA) +
-  # geom_point(aes(x=diff_sl,y=fst)) +
-  # geom_smooth(aes(x=diff_sl,y=fst),method="lm",lty=2,lwd=2,col="black") +
-  theme_custom() +
-  scale_fill_npg()
-  theme_custom()
-#ggdensity(x="fst",alpha=0.5,fill="juv",add="mean",rug=TRUE,palette="aaas")
-#-------------------------------#
+p + geom_text(data=totals,aes(y=10,x=pop,label=n,fill=NULL),col="red",family="Open Sans",size=5)
 
 
+###################################
+#---------------------------------#
+## Calculate FST between species ##
+#---------------------------------#
+###################################
+  
 # convert to genlight object and define ploidy
 latesgen <- vcfR2genlight(lates_vcfR)
 ploidy(latesgen) <- 2
 latesgen <- gl.compliance.check(latesgen)
 
 # clean up names and import associated metadata
-if (type == "gbs") {
-  col.names <- unlist(strsplit(indNames(latesgen),"/project/latesgenomics/jrick/latesGBS_2018/combined_noLates02/bamfiles/aln_"))
-  col.names.clean <- unlist(strsplit(col.names,".sorted.bam"))
-  col.names.clean[col.names.clean == "CEW16_135_2"] <- "CEW16_135"
-  indNames(latesgen)<-col.names.clean
+col.names <- unlist(strsplit(indNames(latesgen),"/project/latesgenomics/jrick/latesGBS_2018/combined_noLates02/bamfiles/aln_"))
+col.names.clean <- unlist(strsplit(col.names,".sorted.bam"))
+col.names.clean[col.names.clean == "CEW16_135_2"] <- "CEW16_135"
+indNames(latesgen)<-col.names.clean
+
+fishinfo <- read.csv('../data/lates_all_metadata.csv',
+                     header=TRUE,stringsAsFactors = FALSE) %>%
+  mutate(Moran_FishID = ind)
   
-  fishinfo <- read.csv('../data/lates_all_metadata.csv',
-                       header=TRUE,stringsAsFactors = FALSE) %>%
-    mutate(Moran_FishID = ind)
-  
-  pairedinfolates <- left_join(data.frame(Moran_FishID=col.names.clean),
-                               fishinfo[,-1], by="Moran_FishID",
-                               all.x=TRUE, all.y=FALSE)
-  
-  #pairedinfolates$Library[pairedinfolates$Library == "lates02lates03"] <- "lates03"
-  
-} else if (type == "rad") {
-  col.names <- unlist(strsplit(indNames(latesgen),"/project/latesgenomics/jrick/latesGBS_2018/combined_all/bwa_all_rad/aln_"))
-  col.names.clean <- unlist(strsplit(col.names,".sorted.bam"))
-  indNames(latesgen)<-col.names.clean
-  
-  fishinfo <- read.csv('lates_rad_metadata.csv',
-                       header=TRUE,stringsAsFactors = FALSE)
-  
-  pairedinfolates <- left_join(data.frame(Moran_ID=col.names.clean),
-                               fishinfo, by="Moran_ID", all.x=TRUE, all.y=FALSE)
-  
-  pop(latesgen) <- pairedinfolates$Library
-}
+pairedinfolates <- left_join(data.frame(Moran_FishID=col.names.clean),
+                             fishinfo[,-1], by="Moran_FishID",
+                             all.x=TRUE, all.y=FALSE)
 
-# now, filter out any individuals with > 50% missing data
-latesgen.nolowcov <- gl.filter.callrate(latesgen,method="ind",
-                                        threshold=0.5,mono.rm=TRUE,
-                                        recalc=FALSE,plot=TRUE,v=2) #TODO -- remove?
+## Now, calculate Reich-Patterson FST between species
+pop(latesgen) <- pairedinfolates$final_ID
 
-#####################
-## Library effects filter
-## filtering SNPs found only in one group or the other
-#####################
-pop(latesgen.nolowcov) <- pairedinfolates$seq_library
-
-if (type == "gbs"){
-  lates01 <- gl.keep.pop(latesgen.nolowcov,
-                         "lates01", 
-                         mono.rm = FALSE)
-  lates01.highcalls <- gl.filter.callrate(lates01, 
-                                          method="loc",
-                                          threshold=0.75,
-                                          recalc=FALSE,
-                                          mono.rm = FALSE)
-  lates03 <- gl.keep.pop(latesgen.nolowcov,
-                         "lates03", mono.rm=FALSE)
-  lates03.highcalls <- gl.filter.callrate(lates03,
-                                          method="loc",
-                                          threshold=0.75, 
-                                          recalc=FALSE, 
-                                          mono.rm=FALSE)
-  
-  snps.all <- Reduce(intersect, 
-                     list(locNames(lates01.highcalls),
-                          locNames(lates03.highcalls)))
-  
-} else if (type == "rad") {
-  
-  GQI128 <- gl.keep.pop(latesgen.nolowcov,
-                        "GQI128", mono.rm = FALSE)
-  GQI128.highcalls <- gl.filter.callrate(GQI128, 
-                                         method="loc",
-                                         threshold=0.75,
-                                         recalc=FALSE,
-                                         mono.rm = FALSE)
-  
-  GQI132 <- gl.keep.pop(latesgen,
-                        "GQI132")
-  GQI132.highcalls <- gl.filter.callrate(GQI132, 
-                                         method="loc",
-                                         threshold=0.75,
-                                         recalc=FALSE,
-                                         mono.rm = FALSE)
-  
-  GQI133 <- gl.keep.pop(latesgen.nolowcov,
-                        "GQI133", mono.rm=FALSE)
-  GQI133.highcalls <- gl.filter.callrate(GQI133, 
-                                         method="loc",
-                                         threshold=0.75,
-                                         recalc=FALSE,
-                                         mono.rm = FALSE)
-  
-  snps.all <- Reduce(intersect, list(locNames(GQI128.highcalls),
-                                     locNames(GQI132.highcalls),
-                                     locNames(GQI133.highcalls)))
-}
-
-latesgen.all <- gl.keep.loc(latesgen.nolowcov, snps.all)
-
-# remove any indv that now have >50% missing data
-latesgen_nolowcov <- gl.filter.callrate(latesgen.all,
-                                        method="ind",
-                                        threshold=0.5,
-                                        mono.rm=T,
-                                        recalc=FALSE,
-                                        plot=TRUE,v=2)
-
-## extracting genotype matrix from genlight
-lates_alleles <- t(as.matrix(latesgen_nolowcov))
-
-dim(lates_alleles)
-head(colnames(lates_alleles)) ## to make sure that the names look good
-
-#################
-## Initial PCA
-#################
-
-lates_pca <- do.pca(lates_alleles)
-pcSummary <- summary(lates_pca)
-scree <- plot(lates_pca, type="lines") 
-
-## Pull metadata associated with individuals in the dataset
-pairedinfolates<-left_join(data.frame(Moran_FishID=indNames(latesgen_nolowcov)),
-                           fishinfo,by="Moran_FishID",all.x=TRUE,all.y=FALSE) 
-pairedinfolates[is.na(pairedinfolates)] <- "UNK"
-head(pairedinfolates) # make sure it paired okay
-
-
-## Combining fish info with PC results 
-if (type == "gbs") {
-  pcaAll <- data.frame(names = pairedinfolates$Moran_FishID,
-                       spp = factor(pairedinfolates$final_ID),
-                       fieldID = factor(pairedinfolates$pheno_ID),
-                       site = factor(pairedinfolates$sampling_loc),
-                       library = factor(pairedinfolates$seq_library),
-                       sex = factor(pairedinfolates$pheno_sex),
-                       EV1 = lates_pca$x[,1],    # the first eigenvector
-                       EV2 = lates_pca$x[,2],    # the second eigenvector
-                       EV3 = lates_pca$x[,3],    # the third eigenvector
-                       EV4 = lates_pca$x[,4],
-                       EV5 = lates_pca$x[,5],
-                       stringsAsFactors = FALSE)
-} else if (type == "rad") {
-  pcaAll <- data.frame(names = pairedinfolates$Indv_ID,
-                       spp = factor(pairedinfolates$Spp),
-                       site = factor(pairedinfolates$Location),
-                       library = factor(pairedinfolates$Library),
-                       sex = factor(pairedinfolates$Sex),
-                       EV1 = lates_pca$x[,1],    # the first eigenvector
-                       EV2 = lates_pca$x[,2],    # the second eigenvector
-                       EV3 = lates_pca$x[,3],    # the third eigenvector
-                       EV4 = lates_pca$x[,4],
-                       EV5 = lates_pca$x[,5],
-                       stringsAsFactors = FALSE)
-}
-
-## Now, plotting the PCA results
-
-# colored by species
-par(oma=c(1,1,1,2), xpd=TRUE, mar=c(5.1, 4.1, 4.1, 1),mfrow=c(1,3))
-plot(pcaAll$EV1, pcaAll$EV2, pch=21, cex=2, lwd=2, bg=scales::alpha(colors2[pcaAll$spp],0.6),col=colors2[pcaAll$spp],
-     xlab=paste("PC1 (", round(pcSummary$importance[2,1]*100, 1), "%)", sep=""),
-     ylab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""))
-legend("topright",legend=levels(pcaAll$spp),col=scales::alpha(colors2,0.6),border=NULL,pch=19,bty="n", cex=1, pt.cex=2, pt.lwd=2, horiz=FALSE)
-
-plot(pcaAll$EV2, pcaAll$EV3, pch=21, cex=2, lwd=2, bg=scales::alpha(colors2[pcaAll$spp],0.6),col=colors2[pcaAll$spp],
-     xlab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""),
-     ylab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""))
-
-plot(pcaAll$EV3, pcaAll$EV4, pch=21, cex=2, lwd=2, bg=scales::alpha(colors2[pcaAll$spp],0.6),col=colors2[pcaAll$spp],
-     xlab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
-     ylab=paste("PC4 (", round(pcSummary$importance[2,4]*100, 1), "%)", sep=""))
-
-# colored by library (to make sure library effects are gone)
-plot.new()
-par(mar=c(6,6,1,4),mfrow=c(1,3),xpd=TRUE, oma=c(2,2,1,2))
-plot(pcaAll$EV1, pcaAll$EV2, pch=21, cex=4, lwd=2, bg=scales::alpha(colors[pcaAll$library],0.5),
-     col=colors[pcaAll$library],
-     xlab=paste("PC1 (", round(pcSummary$importance[2,1]*100, 1), "%)", sep=""),
-     ylab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""),
-     cex.lab=3,cex.axis=2)
-legend("bottomleft",legend=levels(pcaAll$library),col=scales::alpha(colors,0.6),border=NULL,pch=19,bty="n", cex=2, pt.cex=2, pt.lwd=2, horiz=FALSE)
-
-plot(pcaAll$EV2, pcaAll$EV3, pch=21,  cex=4, lwd=2, bg=scales::alpha(colors[pcaAll$library],0.5),
-     col=colors[pcaAll$library],
-     xlab=paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", sep=""),
-     ylab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
-     cex.lab=3,cex.axis=2)
-
-plot(pcaAll$EV3, pcaAll$EV4, pch=21,  cex=4, lwd=2, bg=scales::alpha(colors[pcaAll$library],0.5), 
-     col=colors[pcaAll$library],
-     xlab=paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", sep=""),
-     ylab=paste("PC4 (", round(pcSummary$importance[2,4]*100, 1), "%)", sep=""),
-     cex.lab=3,cex.axis=2)
-
-## 3D and interactive plot for investigating the data
-library(scatterplot3d)
-scatterplot3d(x=pcaAll$EV1,y=pcaAll$EV2,z=pcaAll$EV3,color=scales::alpha(c("#2a9d8f","#e76f51","#70567d","#e9c46a")[pcaAll$spp],0.4),pch=19,cex.symbols=2)
-
-library(plotly)
-p <- plot_ly(pcaAll, x = ~EV1, y = ~EV2, z = ~EV3, color = ~spp, colors = colors.vir,
-             text = ~paste('ID:', names, '<br>Library:', library)) %>%
-  add_markers() %>%
-  
-  layout(scene = list(xaxis = list(title = 
-                                     paste("PC1 (", round(pcSummary$importance[2,1]*100, 1), "%)",
-                                           sep="")),
-                      yaxis = list(title = 
-                                     paste("PC2 (", round(pcSummary$importance[2,2]*100, 1), "%)", 
-                                           sep="")),
-                      zaxis = list(title = 
-                                     paste("PC3 (", round(pcSummary$importance[2,3]*100, 1), "%)", 
-                                           sep=""))))
-p
-
-#####################
-## Calculate Reich-Patterson FST between species
-#####################
-
-pop(latesgen_nolowcov) <- pairedinfolates$final_ID
-pop(latesgen.nolowcov) <- pairedinfolates$final_ID
-
-lates_FST_spp_preLib <- reich.fst(latesgen.nolowcov,
-                           bootstrap=100,
-                           plot=TRUE,
-                           verbose=TRUE)
-
-lates_FST_spp <- reich.fst(latesgen_nolowcov,
+lates_FST_spp <- reich.fst(latesgen,
                            bootstrap=100,
                            plot=TRUE,
                            verbose=TRUE)
 
 # for comparison
-lates_fst_spp_dartR <- gl.fst.pop(latesgen_nolowcov)
+lates_fst_spp_dartR <- gl.fst.pop(latesgen_nolowcov, nboots=100)
 
 # calculate general stats by species
 lates_heterozyg <- gl.report.heterozygosity(latesgen_nolowcov,method="pop")

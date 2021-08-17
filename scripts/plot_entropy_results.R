@@ -19,6 +19,10 @@ details <- read.csv("../data/lates_all_metadata.csv",
 results.dir <- "../../../results/entropy_061621/" # directory with entropy results
 spp_list <- c("lang","lmar","lmic","lsta")
 
+############################
+### Part I: Plotting barplots and checking convergence
+############################
+
 for (spp in spp_list) {
   names <- read.table(paste0(results.dir,spp,".ind"), header=T,sep=",",col.names=c("ind","pop","taxon"))
   fishinfo <- left_join(names, details, by.x="ind", by.y="ind",
@@ -70,28 +74,15 @@ for (spp in spp_list) {
       #next
     }
     
-    ## Plot point estimates for q -- not super helpful at k > 2
-    # pdf("q_hist_lsta_k2.pdf", width=6.5, height=9)
-    # par(mfrow=c(2,2))
-    # for(i in 1:length(unique(fishinfo$Field.ID))){
-    #   hist(q[which(fishinfo$Field.ID ==
-    #                unique(fishinfo$Field.ID)[i]),1], 
-    #        xlab="proportion of ancestry (q)", 
-    #        main=unique(fishinfo$Field.ID)[i],
-    #        col="gray90", xlim=c(0,1))
-    # }
-    # dev.off()
-    
     ## Plot convergence plots
-    # pdf(paste(results.dir,spp,"_conv_plots_k",k,".pdf",sep=""))
+    pdf(paste(results.dir,spp,"_conv_plots_k",k,".pdf",sep=""))
     par(mfrow=c(4,4))
     for (i in 1:nrow(names)){
       plot(data1.q[,1,i],type="l",main=names[i,1],ylim=c(0,1))
       lines(data2.q[,1,i],col="blue")
       lines(data3.q[,1,i],col="red")
     }
-    # dev.off()
-    
+    dev.off()
     
     # stacked barplot
     q.df <- data.frame(names=fishinfo$ind,
@@ -115,10 +106,7 @@ for (spp in spp_list) {
     q.df$assign <- q.df.max$max
     
     spp.assign[,k] <- q.df$assign
-    
-    # q.df <- q.df %>%
-    #   mutate(maxq = apply(q.df,1,max)),
-    #          assign2 = colnames(q.df)[apply(q.df,1,whichmax)])
+  
     
     # changing to long format for plotting
     q.long <- q.df %>% 
@@ -146,17 +134,43 @@ for (spp in spp_list) {
             axis.title.y=element_blank(),
             legend.text=element_text(size=16),
             panel.border=element_blank(),
-            plot.margin = unit(c(0,0.1,0,0.5), "cm")) +
-      scale_fill_manual(values=entropy.cols[(k-1)]:length(entropy.cols))
+            plot.margin = unit(c(0,0.1,0,0.5), "cm")) 
     assign(paste0("plot.k",k),plot)
     print(plot)
+    
+    ## checking to see if assignments match with sampling year, length, juvenile, etc.
+    if (k ==2) {
+      q.info <- q.df %>%
+        left_join(fishinfo, by=c("names" = "ind"))
+      p1 <- q.info %>% 
+        ggplot(aes(y=X1)) +
+          geom_jitter(aes(x=X2,col=as.factor(site),shape=juvenile), size = 4, alpha=0.7, height=0.1, width=0.1) +
+          theme_custom()
+      p2 <- q.info %>%
+        ggplot(aes(y=X1)) +
+          geom_point(aes(x=SL_mm,col=as.factor(sampling_year)),size=5,alpha=0.70) +
+          geom_smooth(aes(x=SL_mm),method="lm",col="black",alpha=0.2) +
+          theme_custom()
+      p3 <- q.info %>%
+        ggplot(aes(y=X1)) +
+        geom_boxplot(aes(x=as.factor(sampling_year)),alpha=0.70) +
+        geom_jitter(aes(x=as.factor(sampling_year),col=assign),alpha=0.70,size=4,width=0.1,height=0.01) +
+        theme_custom()
+      p4 <- q.info %>%
+        ggplot(aes(y=X1)) +
+          geom_boxplot(aes(x=juvenile)) +
+          geom_jitter(aes(x=juvenile,col=site),width=0.1,height=0.01,size=3,alpha=0.70) +
+          theme_custom()
+      p.all <- ggarrange(p1,p2,p3,p4,nrow=1)
+      print(p.all)
+    }
   }
   
   plot.all <- cowplot::plot_grid(plot.k2,plot.k3,
                      #plot.k4,plot.k5,plot.k6, 
                      ncol=1)
   plot.all2 <- ggarrange(plot.k2,plot.k3,
-            plot.k4,plot.k5,plot.k6, 
+            #plot.k4,plot.k5,plot.k6, 
             ncol=1)
   assign(paste0("plot.all.",spp),plot.all)
   assign(paste0("plot.all2.",spp),plot.all2)
@@ -177,9 +191,14 @@ ggarrange(plot.all2.lsta,
           plot.all2.lang,
           nrow=1)
 
-##########################
-## all species combined ##
-##########################
+entropy_assignments <- rbind(lang_assignments,
+                             lmar_assignments,
+                             lmic_assignments,
+                             lsta_assignments)
+
+###############################################
+## Part II: results for all species combined ##
+###############################################
 
 k <- 4
 
@@ -203,18 +222,7 @@ q.ci.width <- q.ci[2,2,]-q.ci[1,2,]
 print(mean(q.ci.width))
 print(median(q.ci.width))
 
-## Plot point estimates dsfor q 
-# pdf("q_hist_lsta_k2.pdf", width=6.5, height=9)
-# par(mfrow=c(2,2))
-# for(i in 1:length(unique(fishinfo$Field.ID))){
-#   hist(q[which(fishinfo$Field.ID ==
-#                unique(fishinfo$Field.ID)[i]),1], 
-#        xlab="proportion of ancestry (q)", 
-#        main=unique(fishinfo$Field.ID)[i],
-#        col="gray90", xlim=c(0,1))
-# }
-# dev.off()
-
+## Convergence plots
 pdf(paste(results.dir,"lates_all_conv_plots_k",k,".pdf",sep=""))
 par(mfrow=c(4,4))
 for (i in 1:nrow(names)){
@@ -224,11 +232,11 @@ for (i in 1:nrow(names)){
 }
 dev.off()
 
-
 # stacked barplot
 q.df <- data.frame(names=fishinfo$ind,
                    site=factor(as.character(fishinfo$sampling_loc), 
-                               levels=c("Kagunga","Kigoma","N_Mahale","S_Mahale","Isonga","Ikola","Mpinbwe","Kirando","Wampembe","Kasanga","Cameroon","Congo","Dar")),
+                               levels=c("Kagunga","Kigoma","N_Mahale","S_Mahale","Isonga","Ikola",
+                                        "Mpinbwe","Kirando","Wampembe","Kasanga")),
                    spp=factor(fishinfo$final_ID),
                    #lib=factor(fishinfo$Library),
                    #plate=factor(fishinfo$Plate),
@@ -247,7 +255,8 @@ q.long <- q.df %>%
   pivot_longer(!c(names,site,spp),names_to="group",values_to="value")  
 
 colors2<-c("#8DD3C7","#BEBADA","#FB8072","#80B1D3",
-           "#B3DE69","#FCCDE5","#D9D9D9","#BC80BD","#CCEBC5","#ffbc42")
+           "#B3DE69","#FCCDE5","#D9D9D9","#BC80BD",
+           "#CCEBC5","#ffbc42")
 
 anno_lines <- q.long %>%
   group_by(spp) %>%
@@ -280,13 +289,11 @@ plot <- ggplot(q.long[!is.na(q.long$site),],
   geom_segment(data=anno_lines,mapping=aes(x=xmin-0.5,xend=xmax/4+0.5,y=ymin,yend=ymax),lwd=3,inherit.aes=FALSE)
 print(plot)
 
-#############################################
 
-#######
-## calculating intraspecific fst for groups
-########
-library(dartR)
-library(vcfR)
+########################################################
+## Part III: Calculating intraspecific fst for groups ##
+########################################################
+
 vcf.rename <- function(x) {
   col.names <- unlist(strsplit(indNames(x),"/project/latesgenomics/jrick/latesGBS_2018/combined_noLates02/bamfiles/aln_"))
   col.names.clean <- unlist(strsplit(col.names,".sorted.bam"))
@@ -388,22 +395,12 @@ if(sum(indNames(lsta_rad_gen) == lsta_rad_assignments$names) == length(lsta_rad_
   print("names do not match. try again!")
 }
 
-## checking to see if assignments match with sampling year, length, juvenile, etc.
-q.df %>%
-  left_join(fishinfo, by=c("names" = "ind")) %>%
-  #filter(site == "Kigoma") %>%
-  ggplot(aes(y=X2)) +
-  geom_jitter(aes(x=X1,col=as.factor(site),shape=juvenile), size = 4, alpha=0.7, height=0.1, width=0.1) +
-  #geom_point(aes(x=SL_mm,col=as.factor(sampling_year)),size=5,alpha=0.70)+
-  theme_custom()
-ggscatter(q.df %>%
-                left_join(fishinfo, by=c("names" = "ind")),
-              x="juvenile",y="X1",col="site")
 
 
-############################
-### plotting DIC for each species
-############################
+
+##############################################
+### Part IV: plotting DIC for each species ###
+##############################################
 dic <- read_csv("../data/dic_results_072021.csv")
 #colnames(dic)[1] <- "spp"
 
