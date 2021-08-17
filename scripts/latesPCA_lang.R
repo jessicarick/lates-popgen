@@ -300,3 +300,9 @@ as.data.frame(Dgen_lang$fsts) %>%
 #                            TRUE ~ "Unk")
 # table(pop(lang.all))
 # Dgen_lang_basin <- reich.fst(lang.all, bootstrap=100, plot=TRUE, verbose=TRUE)
+
+## individual FSTs
+pop(lang.all) <- lang_info_nolowcov$Moran_FishID
+Dgen_lang_ind <- reich.fst(lang.all, bootstrap=FALSE, plot=FALSE, verbose=TRUE)
+Dgen_lang_ind_long <- melt(Dgen_lang_ind$fsts)
+

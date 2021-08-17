@@ -42,7 +42,9 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR)){
     
     fishinfo <- read.csv('../data/lates_all_metadata.csv',
                          header=TRUE,stringsAsFactors = FALSE) %>%
-      mutate(Moran_FishID = ind)
+      mutate(Moran_FishID = ind,
+             SL_mm = as.numeric(SL_mm),
+             TL_mm = as.numeric(TL_mm))
     
     pairedinfolates <- left_join(data.frame(Moran_FishID=col.names.clean),
                                  fishinfo[,-1], by="Moran_FishID",
@@ -233,8 +235,8 @@ for(v in c(lang_vcfR,lmar_vcfR,lmic_vcfR,lsta_vcfR)){
   ## Calculate Reich-Patterson FST between populations
   #####################
   
-  pop(latesgen_nolowcov) <- pairedinfolates$sampling_loc
-  pop(latesgen.nolowcov) <- pairedinfolates$sampling_loc
+  pop(latesgen_nolowcov) <- pairedinfolates$ind
+  pop(latesgen.nolowcov) <- pairedinfolates$ind
   
   # lates_FST_spp_preLib <- reich.fst(latesgen.nolowcov,
   #                                   bootstrap=100,
@@ -373,7 +375,18 @@ ggplot(aes(x=pop1,y=pop2,fill=fst_estimate)) +
 p + geom_text(data=totals,aes(y=11,x=pop,label=n,fill=NULL),col="red",family="Open Sans",size=5)
 
 #------------------------------#
-lmar_fst_byInd$fsts %>%
+## CALCULATING INDIVIDUAL-LEVEL FST
+
+pop(lang_gen) <- indNames(lang_gen)
+lang_fst_ind <- reich.fst(lang_gen,bootstrap=FALSE,plot=FALSE,verbose=TRUE)
+pop(lmar_gen) <- indNames(lmar_gen)
+lmar_fst_ind <- reich.fst(lmar_gen,bootstrap=FALSE,plot=FALSE,verbose=TRUE)
+pop(lmic_gen) <- indNames(lmic_gen)
+lmic_fst_ind  <- reich.fst(lmic_gen,bootstrap=FALSE,plot=FALSE,verbose=TRUE)
+pop(lsta_gen) <- indNames(lsta_gen)
+lsta_fst_ind  <- reich.fst(lsta_gen,bootstrap=FALSE,plot=FALSE,verbose=TRUE)
+
+lmar_fst_ind$fsts %>%
   as_data_frame() %>%
   mutate(pop1 = colnames(.)) %>%
   pivot_longer(cols=!starts_with("pop"),names_to="pop2",values_to="fst") %>%
@@ -384,10 +397,195 @@ lmar_fst_byInd$fsts %>%
                          juvenile.pop1 == "Y" & juvenile.pop2 == "N" ~ "juv-adult",
                          juvenile.pop1 == "N" & juvenile.pop2 == "Y" ~ "juv-adult",
                          juvenile.pop1 == "N" & juvenile.pop2 == "N" ~ "adult-adult",
-                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ "")) %>%
-  filter(!is.na(fst) & juv != "") %>%
-  #ggplot(aes(x=fst,fill=juv)) +
+                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ ""),
+         sampling_season.pop1 = case_when(sampling_month.pop1 == "August" ~ "Fall",
+                                          sampling_month.pop1 == "September" ~ "Fall",
+                                          sampling_month.pop1 == "May" ~ "Spring",
+                                          sampling_month.pop1 == "July" ~ "Summer",
+                                          sampling_month.pop1 == "" ~ ""),
+         sampling_season.pop2 = case_when(sampling_month.pop2 == "August" ~ "Fall",
+                                          sampling_month.pop2 == "September" ~ "Fall",
+                                          sampling_month.pop2 == "May" ~ "Spring",
+                                          sampling_month.pop2 == "July" ~ "Summer",
+                                          sampling_month.pop2 == "" ~ ""),
+         combined_month = paste0(sampling_month.pop1,"-",sampling_month.pop2),
+         combined_season = case_when(sampling_season.pop1 == sampling_season.pop2 ~ sampling_season.pop1,
+                                     sampling_season.pop1 != sampling_season.pop2 ~ paste0(sampling_season.pop1,"-",sampling_season.pop2)),
+         combined_season = case_when(combined_season %in% c("Fall-Spring","Spring-Fall") ~ "Spring-Fall",
+                                     combined_season %in% c("Fall-Summer", "Summer-Fall") ~ "Summer-Fall",
+                                     combined_season %in% c("Spring-Summer","Summer-Spring") ~ "Spring-Summer",
+                                     TRUE ~ combined_season)) %>%
+  left_join(Dgeo_lmar_long,by=c("sampling_loc.pop1" = "Var1","sampling_loc.pop2" = "Var2")) %>%
+  left_join(Dgeo_lmar_long,by=c("sampling_loc.pop1" = "Var2", "sampling_loc.pop2" = "Var1")) %>%
+  mutate(geo_dist_km = case_when(value.x > 0 ~ value.x,
+                                 value.y > 0 ~ value.y)) %>%
+  # group_by(juv) %>%
+  # do(fitJuv = tidy(lm((fst/(1-fst)) ~ log(geo_dist_km), data=.))) %>%
+  # unnest(fitJuv)
+  filter(!is.na(fst) & sampling_month.pop1 != "" & sampling_month.pop2 != "" & juv == "juv-juv"
+           # sampling_year.pop1 %in% c("2017","2018") &
+           # sampling_year.pop2 %in% c("2017","2018")
+         ) %>%
+  ggplot() +
+    geom_jitter(aes(x=combined_season,y=fst,fill=juv),size=4,pch=21, alpha=0.7,width=0.1,height=0) +
+    geom_boxplot(aes(x=combined_season,y=fst),fill=NA,outlier.color=NA) +
+    #geom_point(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv,fill=juv)) +
+    #geom_smooth(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv),method="lm",lty=2,lwd=2) +
+    #geom_point(aes(x=diff_sl,y=fst)) +
+    #geom_smooth(aes(x=diff_sl,y=fst),method="lm",lty=2,lwd=2,col="black") +
+    theme_custom() +
+    scale_fill_npg()
+    theme_custom()
   ggdensity(x="fst",alpha=0.5,fill="juv",add="mean",rug=TRUE,palette="aaas")
+
+lang_fst_ind$fsts %>%
+  as_data_frame() %>%
+  mutate(pop1 = colnames(.)) %>%
+  pivot_longer(cols=!starts_with("pop"),names_to="pop2",values_to="fst") %>%
+  left_join(fishinfo,by=c("pop1" = "ind")) %>%
+  left_join(fishinfo,by=c("pop2" = "ind"),suffix=c(".pop1",".pop2")) %>%
+  mutate(diff_sl = abs(as.numeric(SL_mm.pop1)-as.numeric(SL_mm.pop2)),
+         juv = case_when(juvenile.pop1 == "Y" & juvenile.pop2 == "Y" ~ "juv-juv",
+                         juvenile.pop1 == "Y" & juvenile.pop2 == "N" ~ "juv-adult",
+                         juvenile.pop1 == "N" & juvenile.pop2 == "Y" ~ "juv-adult",
+                         juvenile.pop1 == "N" & juvenile.pop2 == "N" ~ "adult-adult",
+                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ ""),
+         sampling_season.pop1 = case_when(sampling_month.pop1 == "August" ~ "Fall",
+                                          sampling_month.pop1 == "September" ~ "Fall",
+                                          sampling_month.pop1 == "May" ~ "Spring",
+                                          sampling_month.pop1 == "July" ~ "Summer",
+                                          sampling_month.pop1 == "" ~ ""),
+         sampling_season.pop2 = case_when(sampling_month.pop2 == "August" ~ "Fall",
+                                          sampling_month.pop2 == "September" ~ "Fall",
+                                          sampling_month.pop2 == "May" ~ "Spring",
+                                          sampling_month.pop2 == "July" ~ "Summer",
+                                          sampling_month.pop2 == "" ~ ""),
+         combined_month = paste0(sampling_month.pop1,"-",sampling_month.pop2),
+         combined_season = case_when(sampling_season.pop1 == sampling_season.pop2 ~ "same",
+                                     sampling_season.pop1 != sampling_season.pop2 ~ "different"),
+         combined_season = case_when(combined_season %in% c("Fall-Spring","Spring-Fall") ~ "Spring-Fall",
+                                     combined_season %in% c("Fall-Summer", "Summer-Fall") ~ "Summer-Fall",
+                                     combined_season %in% c("Spring-Summer","Summer-Spring") ~ "Spring-Summer",
+                                     TRUE ~ combined_season)) %>%
+  left_join(Dgeo_lang_long,by=c("sampling_loc.pop1" = "Var1","sampling_loc.pop2" = "Var2")) %>%
+  left_join(Dgeo_lang_long,by=c("sampling_loc.pop1" = "Var2", "sampling_loc.pop2" = "Var1")) %>%
+  mutate(geo_dist_km = case_when(value.x > 0 ~ value.x,
+                                 value.y > 0 ~ value.y)) %>%
+  #filter(!is.na(fst)) %>%
+  filter(!is.na(fst)  & sampling_month.pop1 != "" & sampling_month.pop2 != "" & juv == "juv-juv") %>%
+  # group_by(juv) %>%
+  # do(fitJuv = tidy(lm((fst/(1-fst)) ~ log(geo_dist_km), data=.))) %>%
+  # unnest(fitJuv)
+  # 
+  ggplot() +
+  geom_jitter(aes(x=combined_season,y=fst,fill=juv),size=4,pch=21, alpha=0.7,width=0.1,height=0.0001) +
+  geom_boxplot(aes(x=combined_season,y=fst),fill=NA,outlier.color=NA) +
+  #geom_jitter(aes(x=juv,y=fst,fill=juv),size=4,pch=21, width=0.1,height=0.0005,alpha=0.7) +
+    #geom_boxplot(aes(x=juv,y=fst),fill=NA,outlier.color=NA) +
+    # geom_point(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv,fill=juv)) +
+    # geom_smooth(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv),method="lm",lty=2,lwd=2) +
+    #geom_point(aes(x=diff_sl,y=fst)) +
+    #geom_smooth(aes(x=diff_sl,y=fst),method="lm",lty=2,lwd=2,col="black") +
+    theme_custom() +
+    scale_fill_npg()
+  ggdensity(x="fst",alpha=0.5,fill="juv",add="mean",rug=TRUE,palette="aaas",col="juv")
+
+lmic_fst_ind$fsts %>%
+  as_data_frame() %>%
+  mutate(pop1 = colnames(.)) %>%
+  pivot_longer(cols=!starts_with("pop"),names_to="pop2",values_to="fst") %>%
+  left_join(fishinfo,by=c("pop1" = "ind")) %>%
+  left_join(fishinfo,by=c("pop2" = "ind"),suffix=c(".pop1",".pop2")) %>%
+  mutate(diff_sl = abs(as.numeric(SL_mm.pop1)-as.numeric(SL_mm.pop2)),
+         juv = case_when(juvenile.pop1 == "Y" & juvenile.pop2 == "Y" ~ "juv-juv",
+                         juvenile.pop1 == "Y" & juvenile.pop2 == "N" ~ "juv-adult",
+                         juvenile.pop1 == "N" & juvenile.pop2 == "Y" ~ "juv-adult",
+                         juvenile.pop1 == "N" & juvenile.pop2 == "N" ~ "adult-adult",
+                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ ""),
+         sampling_season.pop1 = case_when(sampling_month.pop1 == "August" ~ "Fall",
+                                          sampling_month.pop1 == "September" ~ "Fall",
+                                          sampling_month.pop1 == "May" ~ "Spring",
+                                          sampling_month.pop1 == "July" ~ "Summer",
+                                          sampling_month.pop1 == "" ~ ""),
+         sampling_season.pop2 = case_when(sampling_month.pop2 == "August" ~ "Fall",
+                                          sampling_month.pop2 == "September" ~ "Fall",
+                                          sampling_month.pop2 == "May" ~ "Spring",
+                                          sampling_month.pop2 == "July" ~ "Summer",
+                                          sampling_month.pop2 == "" ~ ""),
+         combined_month = paste0(sampling_month.pop1,"-",sampling_month.pop2),
+         combined_season = case_when(sampling_season.pop1 == sampling_season.pop2 ~ "same",
+                                     sampling_season.pop1 != sampling_season.pop2 ~ "different")) %>%
+  left_join(Dgeo_lmic_long,by=c("sampling_loc.pop1" = "Var1","sampling_loc.pop2" = "Var2")) %>%
+  left_join(Dgeo_lmic_long,by=c("sampling_loc.pop1" = "Var2", "sampling_loc.pop2" = "Var1")) %>%
+  mutate(geo_dist_km = case_when(value.x > 0 ~ value.x,
+                                 value.y > 0 ~ value.y)) %>%
+  # group_by(juv) %>%
+  # do(fitJuv = tidy(lm((fst/(1-fst)) ~ log(geo_dist_km), data=.))) %>%
+  # unnest(fitJuv)
+  filter(!is.na(fst)  & sampling_month.pop1 != "" & sampling_month.pop2 != "" & juv == "juv-juv") %>%
+  ggplot() +
+  geom_jitter(aes(x=combined_season,y=fst,fill=juv),size=4,pch=21, alpha=0.7,width=0.1,height=0) +
+  geom_boxplot(aes(x=combined_season,y=fst),fill=NA,outlier.color=NA) +
+  # geom_jitter(aes(x=juv,y=fst,fill=juv),size=4,pch=21, width=0.1,height=0.0005,alpha=0.7) +
+    # geom_boxplot(aes(x=juv,y=fst),fill=NA,outlier.color=NA) +
+    # geom_point(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv,fill=juv)) +
+    # geom_smooth(aes(x=log(geo_dist_km),y=(fst/(1-fst)),col=juv),method="lm",lty=2,lwd=2) +
+    #geom_point(aes(x=diff_sl,y=fst)) +
+    #geom_smooth(aes(x=diff_sl,y=fst),method="lm",lty=2,lwd=2) +
+    theme_custom() +
+    scale_fill_npg()
+  theme_custom()
+#ggdensity(x="fst",alpha=0.5,fill="juv",add="mean",rug=TRUE,palette="aaas")
+
+lsta_fst_ind$fsts %>%
+  as_data_frame() %>%
+  mutate(pop1 = colnames(.)) %>%
+  pivot_longer(cols=!starts_with("pop"),names_to="pop2",values_to="fst") %>%
+  left_join(fishinfo,by=c("pop1" = "ind")) %>%
+  left_join(fishinfo,by=c("pop2" = "ind"),suffix=c(".pop1",".pop2")) %>%
+  mutate(diff_sl = abs(as.numeric(SL_mm.pop1)-as.numeric(SL_mm.pop2)),
+         juv = case_when(juvenile.pop1 == "Y" & juvenile.pop2 == "Y" ~ "juv-juv",
+                         juvenile.pop1 == "Y" & juvenile.pop2 == "N" ~ "juv-adult",
+                         juvenile.pop1 == "N" & juvenile.pop2 == "Y" ~ "juv-adult",
+                         juvenile.pop1 == "N" & juvenile.pop2 == "N" ~ "adult-adult",
+                         juvenile.pop1 == "" | juvenile.pop2 == "" ~ ""),
+         sampling_season.pop1 = case_when(sampling_month.pop1 == "August" ~ "Fall",
+                                          sampling_month.pop1 == "September" ~ "Fall",
+                                          sampling_month.pop1 == "May" ~ "Spring",
+                                          sampling_month.pop1 == "July" ~ "Summer",
+                                          sampling_month.pop1 == "" ~ ""),
+         sampling_season.pop2 = case_when(sampling_month.pop2 == "August" ~ "Fall",
+                                          sampling_month.pop2 == "September" ~ "Fall",
+                                          sampling_month.pop2 == "May" ~ "Spring",
+                                          sampling_month.pop2 == "July" ~ "Summer",
+                                          sampling_month.pop2 == "" ~ ""),
+         combined_month = paste0(sampling_month.pop1,"-",sampling_month.pop2),
+         combined_season = case_when(sampling_season.pop1 == sampling_season.pop2 ~ sampling_season.pop1,
+                                     sampling_season.pop1 != sampling_season.pop2 ~ paste0(sampling_season.pop1,"-",sampling_season.pop2)),
+         combined_season = case_when(combined_season %in% c("Fall-Spring","Spring-Fall") ~ "Spring-Fall",
+                                     combined_season %in% c("Fall-Summer", "Summer-Fall") ~ "Summer-Fall",
+                                     combined_season %in% c("Spring-Summer","Summer-Spring") ~ "Spring-Summer",
+                                     TRUE ~ combined_season)) %>%
+  left_join(Dgeo_lsta_long,by=c("sampling_loc.pop1" = "Var1","sampling_loc.pop2" = "Var2")) %>%
+  left_join(Dgeo_lsta_long,by=c("sampling_loc.pop1" = "Var2", "sampling_loc.pop2" = "Var1")) %>%
+  mutate(geo_dist_km = case_when(value.x > 0 ~ value.x,
+                                 value.y > 0 ~ value.y)) %>%
+  # group_by(juv) %>%
+  filter(!is.na(fst)  & sampling_month.pop1 != "" & sampling_month.pop2 != "" ) %>%
+  # do(fitJuv = tidy(lm(fst ~ diff_sl, data=.))) %>%
+  # unnest(fitJuv)
+
+  ggplot() +
+    geom_jitter(aes(x=combined_season,y=fst,fill=juv),size=4,pch=21, alpha=0.7,width=0.1,height=0.0001) +
+    geom_boxplot(aes(x=combined_season,y=fst),fill=NA,outlier.color=NA) +
+    #geom_jitter(aes(x=juv,y=fst,fill=juv),size=4,pch=21, width=0.1,height=0.0005,alpha=0.7) +
+  #geom_boxplot(aes(x=juv,y=fst),fill=NA,outlier.color=NA) +
+  # geom_point(aes(x=diff_sl,y=fst)) +
+  # geom_smooth(aes(x=diff_sl,y=fst),method="lm",lty=2,lwd=2,col="black") +
+  theme_custom() +
+  scale_fill_npg()
+  theme_custom()
+#ggdensity(x="fst",alpha=0.5,fill="juv",add="mean",rug=TRUE,palette="aaas")
 #-------------------------------#
 
 

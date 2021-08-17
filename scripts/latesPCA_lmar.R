@@ -183,7 +183,6 @@ abline(v=0,lty=2,lwd=2)
 #pop(latesgen_nolowcov) <- pairedinfolates$site
 #lmar_gp <- genind2genpop(gl2gi(lmar))
 #Dgen_lmar <- dist.genpop(lmar_gp,method=2) # Edward's distance
-pop(lmar.all.nolowcov) <- lmar_info_nolowcov$Location
 Dgen_lmar <- reich.fst(lmar.all.nolowcov,bootstrap=100,plot=TRUE,verbose=TRUE)
 Dgen_lmar_long <- melt(Dgen_lmar$fsts)
 
