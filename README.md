@@ -3,7 +3,9 @@
 
 ## Contents
 ### Data
-- lates\_all\_checkHets\_admix\_comparison.csv
-- lates\_combined\_all\_info\_lib.csv
-- lates\_rad\_metadata.csv
+- lates\_all\_metadata.csv : metadata for individuals included in the GBS dataset
+- lates\_fst\_by\_sampling\_site.csv : Fst estimates by species between all sampling sites
+- lates\_metadata\_assignments.csv : metadata including entropy cluster assignments for the GBS dataset
+- lates\_rad\_metadata.csv : metadata for individuals included in the RAD dataset
+- lktang\_samplingLocs.csv : latitude and longitudes for named sampling sites
 ### Scripts
