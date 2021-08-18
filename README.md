@@ -8,4 +8,5 @@
 - lates\_metadata\_assignments.csv : metadata including entropy cluster assignments for the GBS dataset
 - lates\_rad\_metadata.csv : metadata for individuals included in the RAD dataset
 - lktang\_samplingLocs.csv : latitude and longitudes for named sampling sites
+- Note: filtered VCFs can be found in the associated Zenodo repository at http://doi.org/10.5281/zenodo.5216259
 ### Scripts
