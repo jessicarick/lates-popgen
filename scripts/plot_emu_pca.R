@@ -173,6 +173,7 @@ if (length(args) == 1) {
             legend.position = "bottom",
             legend.margin = margin(15, 0, 15, 0),
             plot.margin = margin(30,5,10,5))
+    
     plot.miss2 <- combined %>%
       ggplot(aes(x=X2,y=F_MISS,col=sampling_loc,fill=sampling_loc)) +
       geom_point(pch=21,size=7,alpha=0.8) + 
