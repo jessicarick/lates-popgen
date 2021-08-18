@@ -1,4 +1,4 @@
-ind,sampling_year,sampling_month,sampling_loc,seq_library,SL_mm,TL_mm,mass_g,juvenile,raw_reads,assem_reads,assem_pct,pheno_ID,pheno_sex,pca_ID_RAD,pca_ID_GBS,adm_ID,ngsadm_ID,ent_ID,agree?,checkHets,keep,comments,final_ID
+ind,sampling_year,sampling_month,sampling_loc,seq_library,SL_mm,TL_mm,mass_g,juvenile,raw_reads,assem_reads,assem_pct,pheno_ID,pheno_sex,pca_ID_RAD,pca_ID_GBS,adm_ID,ngsadm_ID,entropy_ID,spp_agree,checkHets,keep,comments,final_ID
 CEW16_023,2016,July,Kigoma,lates01,,,15.2,Y,1442804,1346528,93.30%,Juv,,#N/A,#N/A,Lmic,Lmic,Lmic,TRUE,2,Y,Caught in littoral gill net,Lmic
 CEW16_029,2016,July,Kigoma,lates01,,,,N,2160207,1986656,92.00%,Lang,,#N/A,#N/A,Lang,Lang,Lang,TRUE,2,Y,,Lang
 CEW16_034,2016,July,Kigoma,lates01,,,,N,1888963,1722084,91.20%,Lsta,,#N/A,#N/A,Lsta,Lsta,Lsta,TRUE,2,Y,Bought from fisherman,Lsta
