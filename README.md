@@ -9,7 +9,9 @@
 - lates\_rad\_metadata.csv : metadata for individuals included in the RAD dataset
 - lktang\_samplingLocs.csv : latitude and longitudes for named sampling sites
 - Note: filtered VCFs can be found in the associated Zenodo repository at http://doi.org/10.5281/zenodo.5216259
+
 ### Scripts
+
 *Scripts for command line genomic analyses*
 - checkHetsIndvVCF.sh
 - run_angsd_thetas.sh
@@ -17,6 +19,7 @@
 - Entropy scripts:
   - vcf2mpgl.R
   - plot_entropy_results.R
+
 *Scripts for analysis in R*
 - latesIBD_lang.R
 - latesIBD_lmar.R
@@ -25,6 +28,7 @@
 - lates_depth_whoa.R
 - lates_fst_ind.R
 - plot_emu_pca.R
+
 *Helper scripts*
 - packages_funcs.R
 - theme_custom.R
