@@ -18,7 +18,10 @@
 - run_angsd_thetas_array.sh
 - Entropy scripts:
   - vcf2mpgl.R
-  - plot_entropy_results.R
+  - lates_entropy_plots.R
+  - lates_entropy_plots_perSpp.R
+  - run_entropy_array.sh
+  - run_entropy_parallel_array.sh
 
 *Scripts for analysis in R*
 - latesIBD_lang.R
