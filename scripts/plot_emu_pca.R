@@ -21,13 +21,13 @@ args <- paste0(dir,c("lsta_092320_0.5_maf0.01_thin90_dp5",
 
 ## load information about missingness
 ## from vcftools --missing-indv option
-lang.imiss <- read_table2("../data/lang_092320_0.5_maf0.01_thin90_dp5.imiss") %>%
+lang.imiss <- read_table2("../results/lang_092320_0.5_maf0.01_thin90_dp5.imiss") %>%
   mutate(SPP = "Lang")
-lmar.imiss <- read_table2("../data/lmar_092320_0.5_maf0.01_thin90_dp5.imiss") %>%
+lmar.imiss <- read_table2("../results/lmar_092320_0.5_maf0.01_thin90_dp5.imiss") %>%
   mutate(SPP = "Lmar")
-lmic.imiss <- read_table2("../data/lmic_092320_0.5_maf0.01_thin90_dp5.imiss") %>%
+lmic.imiss <- read_table2("../results/lmic_092320_0.5_maf0.01_thin90_dp5.imiss") %>%
   mutate(SPP = "Lmic")
-lsta.imiss <- read_table2("../data/lsta_092320_0.5_maf0.01_thin90_dp5.imiss") %>%
+lsta.imiss <- read_table2("../results/lsta_092320_0.5_maf0.01_thin90_dp5.imiss") %>%
   mutate(SPP = "Lsta")
 all.imiss <- rbind(lang.imiss,lmar.imiss,lmic.imiss,lsta.imiss)  %>%
   filter(F_MISS < 0.5)
@@ -35,13 +35,13 @@ ggdensity(all.imiss,x="F_MISS",fill="SPP",col="SPP",palette=spp_cols,rug=TRUE,ad
 
 ## load information about depth
 ## from vcftools --site-mean-depth option
-lang.ldepth <- read_table2("../data/lang_092320_0.5_maf0.01_thin90_dp5.ldepth.mean") %>%
+lang.ldepth <- read_table2("../results/lang_092320_0.5_maf0.01_thin90_dp5.ldepth.mean") %>%
   mutate(SPP = "Lang")
-lmar.ldepth <- read_table2("../data/lmar_092320_0.5_maf0.01_thin90_dp5.ldepth.mean") %>%
+lmar.ldepth <- read_table2("../results/lmar_092320_0.5_maf0.01_thin90_dp5.ldepth.mean") %>%
   mutate(SPP = "Lmar")
-lmic.ldepth <- read_table2("../data/lmic_092320_0.5_maf0.01_thin90_dp5.ldepth.mean") %>%
+lmic.ldepth <- read_table2("../results/lmic_092320_0.5_maf0.01_thin90_dp5.ldepth.mean") %>%
   mutate(SPP = "Lmic")
-lsta.ldepth <- read_table2("../data/lsta_092320_0.5_maf0.01_thin90_dp5.ldepth.mean") %>%
+lsta.ldepth <- read_table2("../results/lsta_092320_0.5_maf0.01_thin90_dp5.ldepth.mean") %>%
   mutate(SPP = "Lsta")
 all.ldepth <- rbind(lang.ldepth,lmar.ldepth,lmic.ldepth,lsta.ldepth)
 depth.stats <- all.ldepth %>%
@@ -223,8 +223,8 @@ if (length(args) == 1) {
 ## make a plot for the species combined dataset
 #########################
 
-base <- "../../../lates_popgen/results/emu_062021/lates_all_092320_0.5_maf0.01_thin90_dp5"
-info <- read_csv("../../../lates_popgen/scripts/lates_popgen_github/data/lates_all_metadata.csv") %>%
+base <- "../results/lates_all_092320_0.5_maf0.01_thin90_dp5"
+info <- read_csv("../lates_all_metadata.csv") %>%
   mutate(sampling_loc = factor(sampling_loc,levels=c("Kagunga","Kigoma","N_Mahale","S_Mahale",
                                                      "Isonga","Ikola","Mpinbwe","Kirando","Wampembe",
                                                      "Kasanga")))

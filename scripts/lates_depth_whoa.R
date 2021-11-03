@@ -1,7 +1,7 @@
-# examining read depth for lates_all_092320_rawvariants VCF
+# examining read depth for lates filtered VCFs
 library(tidyverse)
 
-depth <- read_table2("~/Dropbox/i/projects/lates_popgen/results/lates_all_092320_rawvariants_depth_byInd2.txt",
+depth <- read_table2("../results/lates_all_092320_rawvariants_depth_byInd2.txt",
                      col_names=TRUE)
 depth2 <- depth %>%
   rowwise() %>%
@@ -21,31 +21,31 @@ library(whoa)
 source("theme_custom.R")
 library(patchwork)
 
-lates_vcf <- vcfR::read.vcfR("../data/lates_all_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lates_vcf <- vcfR::read.vcfR("lates_all_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
 gfreqs <- exp_and_obs_geno_freqs(lates_vcf)
 p.lates <- geno_freqs_scatter(gfreqs,max_plot_loci=100000) +
   theme_custom()
 binned_lates <- infer_m(lates_vcf, minBin=20000)
 
-lsta_vcf <- vcfR::read.vcfR("../data/lsta_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lsta_vcf <- vcfR::read.vcfR("lsta_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
 gfreqs_lsta <- exp_and_obs_geno_freqs(lsta_vcf)
 p.lsta <- geno_freqs_scatter(gfreqs_lsta,max_plot_loci=100000) +
   theme_custom()
 binned_lsta <- infer_m(lsta_vcf, minBin=2000)
 
-lmic_vcf <- vcfR::read.vcfR("../data/lmic_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lmic_vcf <- vcfR::read.vcfR("lmic_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
 gfreqs_lmic <- exp_and_obs_geno_freqs(lmic_vcf)
 p.lmic <- geno_freqs_scatter(gfreqs_lmic,max_plot_loci=100000) +
   theme_custom()
 binned_lmic <- infer_m(lmic_vcf, minBin=2000)
 
-lmar_vcf <- vcfR::read.vcfR("../data/lmar_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lmar_vcf <- vcfR::read.vcfR("lmar_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
 gfreqs_lmar <- exp_and_obs_geno_freqs(lmar_vcf)
 p.lmar <- geno_freqs_scatter(gfreqs_lmar,max_plot_loci=100000) +
   theme_custom()
 binned_lmar <- infer_m(lmar_vcf, minBin=2000)
 
-lang_vcf <- vcfR::read.vcfR("../data/lang_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
+lang_vcf <- vcfR::read.vcfR("lang_092320_0.5_maf0.01_thin90_dp5.recode.vcf")
 gfreqs_lang <- exp_and_obs_geno_freqs(lang_vcf)
 p.lang <- geno_freqs_scatter(gfreqs_lang,max_plot_loci=100000) +
   theme_custom()
