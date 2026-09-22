@@ -1,5 +1,5 @@
 # lates-popgen
-[ Note: repository is a work in progress, Nov 2021, and may be updated as a result of the manuscript review process ] Repository for scripts associated with Rick, Junker, et al.'s manuscript on population genetics in Lake Tanganyika's Lates spp., currently [available on bioRxiv](https://www.biorxiv.org/content/10.1101/2021.04.23.441176v3).
+Repository for scripts associated with Rick, Junker, et al.'s manuscript on population genetics in Lake Tanganyika's Lates spp., currently [available on bioRxiv](https://www.biorxiv.org/content/10.1101/2021.04.23.441176v3) and published in Journal of Heredity [https://doi.org/10.1093/jhered/esab072](https://doi.org/10.1093/jhered/esab072).
 
 ## Contents
 ### Data
